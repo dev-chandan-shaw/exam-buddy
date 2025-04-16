@@ -16,14 +16,13 @@ public class SubjectController {
 
     @GetMapping
     private List<Subject> getAllSubject() {
-
         return subjectRepository.findAll();
     }
 
     @PostMapping
-    public ResponseEntity<?> addSubject(@RequestBody Subject reqBody) {
+    public ResponseEntity<?> addSubject(@RequestParam String name) {
         Subject subject = new Subject();
-        subject.setName(reqBody.getName());
+        subject.setName(name);
         subjectRepository.save(subject);
         return ResponseEntity.ok(subject);
     }

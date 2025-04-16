@@ -2,6 +2,7 @@
   <mat-card
     appearance="outlined"
     class="mt-4 cursor-pointer hover:bg-slate-100"
+    (click)="openCreateTestDialog()"
   >
     <mat-card-content>
       <div class="flex justify-between items-center">
@@ -44,3 +45,5 @@
     </mat-card-content>
   </mat-card>
 </div>
+
+<app-question-form />

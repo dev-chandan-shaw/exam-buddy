@@ -4,21 +4,16 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-
-@Entity
 @Data
-public class Subject {
+@Entity
+public class Subtopic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+    private long id;
     private String name;
 
-    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne
+    @JoinColumn(name = "topic_id")
     @JsonIgnore
-    private List<Topic> topics = new ArrayList<>();
+    private Topic topic;
 }
-
-

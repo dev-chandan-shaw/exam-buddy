@@ -9,16 +9,18 @@ import java.util.List;
 
 @Entity
 @Data
-public class Subject {
+public class Topic {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     private String name;
 
-    @OneToMany(mappedBy = "subject", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ManyToOne
+    @JoinColumn(name = "subject_id")
     @JsonIgnore
-    private List<Topic> topics = new ArrayList<>();
+    private Subject subject;
+
+    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Subtopic> subtopics = new ArrayList<>();
 }
-
-

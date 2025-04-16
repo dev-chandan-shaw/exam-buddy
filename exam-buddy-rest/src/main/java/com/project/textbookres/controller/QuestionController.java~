@@ -63,7 +63,6 @@ public class QuestionController {
             return ResponseEntity.badRequest().body("Subtopic is not present for given id: " + subtopicId);
         }
 
-        //creating the options
         List<QuestionOption> questionOptions = new ArrayList<>();
         for (OptionDTO option : reqBody.getOptions()) {
             QuestionOption questionOption = new QuestionOption();
@@ -72,7 +71,6 @@ public class QuestionController {
             questionOptions.add(questionOption);
         }
 
-        //creating the question object
         Question question = new Question();
         question.setPassage(reqBody.getPassage());
         question.setSubtopic(optionalSubtopic.get());
@@ -80,11 +78,8 @@ public class QuestionController {
         question.setOptions(questionOptions);
         question.setDescription(reqBody.getDescription());
 
-        //add question to the associated section
         optionalTestSection.get().getQuestions().add(question);
 
-        //saving all to the db
-        // save the question before saving options
         questionRepository.save(question);
         questionOptionRepository.saveAll(questionOptions);
         testSectionRepository.save(optionalTestSection.get());

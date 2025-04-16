@@ -1,4 +1,5 @@
 package com.project.textbookres.model;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -8,20 +9,11 @@ import java.util.List;
 
 @Entity
 @Data
-public class Exam {
+public class Greeting {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-
-    private String title;
-
+    @OneToMany(mappedBy = "greeting", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JsonIgnore
-    private int marksPerQuestion;
-
-    @JsonIgnore
-    private double negativeMark;
-
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<ExamSection> sections = new ArrayList<>();
+    private List<Hello> hellos = new ArrayList<>();
 }

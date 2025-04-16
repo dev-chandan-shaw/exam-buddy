@@ -1,1 +1,35 @@
-<p>create-test works!</p>
+<h2 mat-dialog-title>Add Test</h2>
+<mat-dialog-content>
+  <form class="example-form" [formGroup]="form" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Exam</mat-label>
+      <mat-select required="true" formControlName="examId">
+        @for (exam of exams; track $index) {
+        <mat-option value="{{ exam.id }}">{{ exam.title }}</mat-option>
+        }
+      </mat-select>
+      <mat-error *ngIf="form.get('examId')?.hasError('required')">
+        Exam is required
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="w-full">
+      <mat-label>Test Title</mat-label>
+      <input matInput formControlName="testTitle" [required]="true" />
+      <mat-error *ngIf="form.get('testTitle')?.hasError('required')">
+        Test title is required
+      </mat-error>
+    </mat-form-field>
+    <mat-checkbox formControlName="isPyqTest">Previous year test?</mat-checkbox>
+    <div class="flex justify-end gap-4">
+      <button mat-button type="button" (click)="onClose()">Cancel</button>
+      <button
+        mat-flat-button
+        color="primary"
+        [disabled]="!form.valid"
+        type="submit"
+      >
+        Save
+      </button>
+    </div>
+  </form>
+</mat-dialog-content>

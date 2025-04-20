@@ -1,7 +1,6 @@
 package com.project.textbookres.controller;
 
 import com.project.textbookres.dto.CreateTestRequest;
-import com.project.textbookres.dto.TestDTO;
 import com.project.textbookres.model.*;
 import com.project.textbookres.respository.ExamRepository;
 import com.project.textbookres.respository.QuestionRepository;
@@ -67,7 +66,18 @@ public class TestController {
 
 
 
-
+    @GetMapping("/test")
+    public ResponseEntity<?> getNotPublishedTest(@RequestParam (required = false) Boolean isPublished, @RequestParam(required = false) Long examId) {
+        List<Test> tests;
+        if (isPublished != null) {
+            tests = testRepository.findByPublished(isPublished);
+        } else if (examId != null) {
+            tests = testRepository.findByExamId(examId);
+        } else {
+            return ResponseEntity.badRequest().body("Invalid request");
+        }
+        return ResponseEntity.ok(tests);
+    }
 
     @GetMapping
     public ResponseEntity<?> getAllTest() {
@@ -75,12 +85,19 @@ public class TestController {
         return ResponseEntity.ok(testList);
     }
 
+    @GetMapping("/test/{testId}")
+    public ResponseEntity<?> getTestById(@PathVariable long testId) {
+        Optional<Test> test = testRepository.findById(testId);
+        if (test.isEmpty()) return ResponseEntity.badRequest().body("Test not found with id " + testId);
+        return ResponseEntity.ok(test.get());
+    }
+
     @DeleteMapping
     public ResponseEntity<?> deleteTestById(@RequestParam long testId) {
         testRepository.deleteById(testId);
         return ResponseEntity.ok("Deleted Successfully");
-        
     }
+
 
 
 

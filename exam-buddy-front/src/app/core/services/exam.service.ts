@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
+import { IExam } from '@shared/models';
 import { environment } from 'app/environments/environment';
-import { IExam } from 'app/features/exam/models';
 
 @Injectable({ providedIn: 'root' })
 export class ExamService {

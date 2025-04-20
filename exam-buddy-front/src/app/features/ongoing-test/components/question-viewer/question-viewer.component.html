@@ -1,0 +1,146 @@
+<div class="h-[calc(100vh-2.6rem)] relative">
+  <!-- {{ currentAnswer | json }} -->
+  <div class="border-b-2 p-4">
+    <div class="flex justify-between w-full">
+      <h1 class="font-bold">Question No. {{ questionIndex() + 1 }}</h1>
+      <p>
+        Time :
+        {{ questionState().timeTakenSeconds | timeFormat }}
+      </p>
+    </div>
+  </div>
+  <div class="mt-4 p-4">
+    <fieldset>
+      <legend
+        [innerHTML]="questionState().question.description"
+        mathjax
+      ></legend>
+
+      <div class="mt-8 ml-4 flex flex-col gap-2">
+        <label
+          class="flex items-center gap-2 cursor-pointer hover:bg-zinc-50 p-2"
+        >
+          <input
+            type="radio"
+            name="option"
+            id="optionA"
+            [checked]="
+              selectedOptionId() === questionState().question.options[0].id
+            "
+            (change)="
+              handleOptionChange(questionState().question.options[0].id)
+            "
+          />
+          <span
+            [innerHTML]="questionState().question.options[0].description"
+          ></span>
+        </label>
+        <label
+          class="flex items-center gap-2 cursor-pointer hover:bg-zinc-50 p-2"
+        >
+          <input
+            type="radio"
+            name="option"
+            id="optionB"
+            [checked]="
+              selectedOptionId() === questionState().question.options[1].id
+            "
+            (change)="
+              handleOptionChange(questionState().question.options[1].id)
+            "
+          />
+          <span
+            [innerHTML]="questionState().question.options[1].description"
+          ></span>
+        </label>
+        <label
+          class="flex items-center gap-2 cursor-pointer hover:bg-zinc-50 p-2"
+        >
+          <input
+            type="radio"
+            name="option"
+            id="optionC"
+            [checked]="
+              selectedOptionId() === questionState().question.options[2].id
+            "
+            (change)="
+              handleOptionChange(questionState().question.options[2].id)
+            "
+          />
+          <span
+            [innerHTML]="questionState().question.options[2].description"
+          ></span>
+        </label>
+        <label
+          class="flex items-center gap-2 cursor-pointer hover:bg-zinc-50 p-2"
+        >
+          <input
+            type="radio"
+            name="option"
+            id="optionD"
+            [checked]="
+              selectedOptionId() === questionState().question.options[3].id
+            "
+            (change)="
+              handleOptionChange(questionState().question.options[3].id)
+            "
+          />
+          <span
+            [innerHTML]="questionState().question.options[3].description"
+          ></span>
+        </label>
+      </div>
+      <div
+        class="flex gap-4 justify-between absolute bottom-0 w-[calc(100%-32px)] py-2"
+      >
+        <div class="flex gap-4">
+          <button (click)="markForReview()" class="bg-[#A9D0F5] p-2 rounded-sm">
+            Mark For Review and Next
+          </button>
+          <button class="bg-[#A9D0F5] p-2 rounded-sm" (click)="clearResponse()">
+            Clear Response
+          </button>
+        </div>
+        <button
+          (click)="saveAndNext()"
+          class="bg-[#1FBAD6] text-white p-2 rounded-sm"
+        >
+          Save & Next
+        </button>
+      </div>
+    </fieldset>
+  </div>
+</div>
+
+<!-- <p [innerHTML]="question()?.description" mathjax></p>
+    <div class="mt-8 ml-4 flex flex-col gap-4">
+      <p>
+        
+  
+        <label for="optionA" [innerHTML]="question()?.optionA" mathjax></label>
+      </p>
+      <p>
+        <input
+          type="radio"
+          name="optionB"
+          [checked]="answer()?.selectedOption === 2"
+        />
+        <label for="optionB" [innerHTML]="question()?.optionB" mathjax></label>
+      </p>
+      <p>
+        <input
+          type="radio"
+          name="optionC"
+          [checked]="answer()?.selectedOption === 3"
+        />
+        <label for="optionC" [innerHTML]="question()?.optionC" mathjax></label>
+      </p>
+      <p>
+        <input
+          type="radio"
+          name="optionD"
+          [checked]="answer()?.selectedOption === 4"
+        />
+        <label for="optionD" [innerHTML]="question()?.optionD" mathjax></label>
+      </p>
+    </div> -->

@@ -1,4 +1,4 @@
-import { IExam } from 'app/features/exam/models';
+import { IExam } from '@shared/models/exam';
 
 export interface CreateTestDialogData {
   exams: IExam[];

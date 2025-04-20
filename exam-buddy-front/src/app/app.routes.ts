@@ -1,14 +1,13 @@
 import { Routes } from '@angular/router';
-import { AdminComponent } from './features/admin/admin.component';
-
 export const routes: Routes = [
   {
     path: '',
-    redirectTo: 'exams',
     pathMatch: 'full',
+    loadComponent: () =>
+      import('./features/exam/exam.component').then((m) => m.ExamComponent),
   },
   {
-    path: 'exams',
+    path: 'exam',
     loadChildren: () =>
       import('./features/exam/exam.routes').then((m) => m.EXAM_ROUTES),
   },
@@ -18,7 +17,15 @@ export const routes: Routes = [
       import('./features/admin/admin.routes').then((m) => m.ADMIN_ROUTES),
   },
   {
+    path: 'active-test',
+    loadComponent: () =>
+      import('./features/ongoing-test/ongoing-test.component').then(
+        (m) => m.OngoingTestComponent
+      ),
+  },
+  {
     path: '**',
-    redirectTo: 'exams',
+    redirectTo: 'exam',
+    // Note: Cannot use canActivate here either
   },
 ];

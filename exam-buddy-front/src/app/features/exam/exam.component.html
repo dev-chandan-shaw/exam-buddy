@@ -1,7 +1,3 @@
-<div class="h-screen relative py-4 overflow-auto" #scrollContainer>
-  <ng-container *ngFor="let item of exams(); let i = index">
-    <div class="mb-4">
-      <app-exam-card [exam]="item" />
-    </div>
-  </ng-container>
+<div class="w-[1200px] m-auto my-4">
+  <router-outlet />
 </div>

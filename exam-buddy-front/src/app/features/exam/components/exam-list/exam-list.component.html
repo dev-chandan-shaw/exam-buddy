@@ -1,0 +1,7 @@
+<div class="h-screen relative overflow-auto" #scrollContainer>
+  <ng-container *ngFor="let item of exams(); let i = index">
+    <div class="mb-4 cursor-pointer" [routerLink]="[item.id, 'test']">
+      <app-exam-card [exam]="item" />
+    </div>
+  </ng-container>
+</div>

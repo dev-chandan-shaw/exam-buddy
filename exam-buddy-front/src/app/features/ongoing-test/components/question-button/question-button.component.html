@@ -1,0 +1,14 @@
+<button
+  [ngStyle]="{ height: height() + 'px', width: width() + 'px' }"
+  class="flex items-center justify-center relative"
+  [ngClass]="styleClass()"
+  [class]="status() | questionStatusClass"
+>
+  {{ value() }}
+  <span
+    *ngIf="showCheckmark()"
+    class="material-symbols-outlined absolute -top-2 -right-2 text-green-700"
+  >
+    check
+  </span>
+</button>

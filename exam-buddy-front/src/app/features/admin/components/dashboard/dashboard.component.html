@@ -1,0 +1,76 @@
+<div class="grid grid-cols-2 py-4 gap-4">
+  <mat-card
+    appearance="outlined"
+    class="mt-4 cursor-pointer hover:bg-slate-100"
+    (click)="openCreateTestDialog()"
+  >
+    <mat-card-content>
+      <div class="flex justify-between items-center">
+        <div>Add new test</div>
+        <mat-icon>chevron_right</mat-icon>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card
+    appearance="outlined"
+    class="mt-4 cursor-pointer hover:bg-slate-100"
+  >
+    <mat-card-content>
+      <div class="flex justify-between items-center">
+        <div>Add new exam</div>
+        <mat-icon>chevron_right</mat-icon>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card
+    appearance="outlined"
+    class="mt-4 cursor-pointer hover:bg-slate-100"
+  >
+    <mat-card-content>
+      <div class="flex justify-between items-center">
+        <div>Add new subject</div>
+        <mat-icon>chevron_right</mat-icon>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  <mat-card
+    appearance="outlined"
+    class="mt-4 cursor-pointer hover:bg-slate-100"
+  >
+    <mat-card-content>
+      <div class="flex justify-between items-center">
+        <div>Add new sub-topics</div>
+        <mat-icon>chevron_right</mat-icon>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<div class="mb-4">
+  <h1 class="text-xl">Unpublished Tests</h1>
+  <ng-container *ngFor="let test of unpublishedTests(); let i = index">
+    <mat-card
+      appearance="outlined"
+      class="mt-4 cursor-pointer hover:bg-slate-100"
+      [routerLink]="['test', test.id, 'draft']"
+    >
+      <mat-card-content>
+        <p>{{ test.title }}</p>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+</div>
+
+<div *ngIf="publishedTests().length" class="mb-4">
+  <h1 class="text-xl">Published Tests</h1>
+  <ng-container *ngFor="let test of unpublishedTests(); let i = index">
+    <mat-card
+      appearance="outlined"
+      class="mt-4 cursor-pointer hover:bg-slate-100"
+    >
+      <mat-card-content>
+        <p>{{ test.title }}</p>
+      </mat-card-content>
+    </mat-card>
+  </ng-container>
+</div>

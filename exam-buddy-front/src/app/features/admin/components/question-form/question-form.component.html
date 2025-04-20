@@ -1,111 +1,129 @@
-<mat-stepper orientation="vertical" #stepper>
-  <mat-step label="Question Description">
-    <form>
-      <mat-form-field class="w-full mt-4">
-        <mat-label>Name</mat-label>
-        <input
-          matInput
-          placeholder="Last name, First name"
-          formControlName="firstCtrl"
-          required
-        />
-      </mat-form-field>
-      <div>
-        <button mat-button matStepperNext>Next</button>
-      </div>
-    </form>
-  </mat-step>
-  <mat-step label="First Option">
-    <form>
-      <mat-form-field>
-        <mat-label>Address</mat-label>
-        <input
-          matInput
-          formControlName="secondCtrl"
-          placeholder="Ex. 1 Main St, New York, NY"
-          required
-        />
-      </mat-form-field>
+<div class="border rounded-md p-4">
+  <h1 class="text-xl underline text-center mb-4">Question Form</h1>
+  <mat-stepper orientation="vertical" linear #stepper>
+    <mat-step
+      [stepControl]="questionPassageFromGroup"
+      label="Passage (Optional)"
+    >
+      <form [formGroup]="questionPassageFromGroup">
+        <mat-form-field class="w-full mt-4">
+          <mat-label>Question Passage</mat-label>
+          <input
+            matInput
+            placeholder="Enter Question Passage"
+            formControlName="passage"
+          />
+        </mat-form-field>
+        <div>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="questionDescriptionFromGroup" label="Description">
+      <form [formGroup]="questionDescriptionFromGroup">
+        <mat-form-field class="w-full mt-4">
+          <mat-label>Question Description</mat-label>
+          <input
+            matInput
+            placeholder="Enter Question Description"
+            formControlName="description"
+            required
+          />
+        </mat-form-field>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+
+    <mat-step [stepControl]="firstOptionFromGroup" label="First Option">
+      <form [formGroup]="firstOptionFromGroup">
+        <mat-form-field class="w-full mt-4">
+          <mat-label>First Option</mat-label>
+          <input
+            matInput
+            formControlName="description"
+            placeholder="Enter Option Description"
+          />
+        </mat-form-field>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="secondOptionFromGroup" label="Secont Option">
+      <form [formGroup]="secondOptionFromGroup">
+        <mat-form-field class="w-full mt-4">
+          <mat-label>Second Option</mat-label>
+          <input
+            matInput
+            formControlName="description"
+            placeholder="Enter Option Description"
+          />
+        </mat-form-field>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="thirdOptionFromGroup" label="Third Option">
+      <form [formGroup]="thirdOptionFromGroup">
+        <mat-form-field class="w-full mt-4">
+          <mat-label>Third Option</mat-label>
+          <input
+            matInput
+            formControlName="description"
+            placeholder="Enter Option Description"
+          />
+        </mat-form-field>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="fourthOptionFromGroup" label="Fourth Option">
+      <form [formGroup]="fourthOptionFromGroup">
+        <mat-form-field class="w-full mt-4">
+          <mat-label>Fourth Option</mat-label>
+          <input
+            matInput
+            formControlName="description"
+            placeholder="Enter Option Description"
+          />
+        </mat-form-field>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="solutionFromGroup" label="Solution">
+      <form [formGroup]="solutionFromGroup">
+        <mat-form-field class="w-full mt-4">
+          <mat-label>Solution</mat-label>
+          <input
+            matInput
+            formControlName="solution"
+            placeholder="Enter Solution Description"
+          />
+        </mat-form-field>
+        <div>
+          <button mat-button matStepperPrevious>Back</button>
+          <button mat-button matStepperNext>Next</button>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step>
+      <ng-template matStepLabel>Done</ng-template>
+      <p>You are now done.</p>
       <div>
         <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
+        <button mat-button (click)="onSubmit()">Create</button>
       </div>
-    </form>
-  </mat-step>
-  <mat-step label="First Option">
-    <form>
-      <mat-form-field>
-        <mat-label>Address</mat-label>
-        <input
-          matInput
-          formControlName="secondCtrl"
-          placeholder="Ex. 1 Main St, New York, NY"
-          required
-        />
-      </mat-form-field>
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
-      </div>
-    </form>
-  </mat-step>
-  <mat-step label="First Option">
-    <form>
-      <mat-form-field>
-        <mat-label>Address</mat-label>
-        <input
-          matInput
-          formControlName="secondCtrl"
-          placeholder="Ex. 1 Main St, New York, NY"
-          required
-        />
-      </mat-form-field>
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
-      </div>
-    </form>
-  </mat-step>
-  <mat-step label="First Option">
-    <form>
-      <mat-form-field>
-        <mat-label>Address</mat-label>
-        <input
-          matInput
-          formControlName="secondCtrl"
-          placeholder="Ex. 1 Main St, New York, NY"
-          required
-        />
-      </mat-form-field>
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
-      </div>
-    </form>
-  </mat-step>
-  <mat-step label="Solution">
-    <form>
-      <mat-form-field>
-        <mat-label>Address</mat-label>
-        <input
-          matInput
-          formControlName="secondCtrl"
-          placeholder="Ex. 1 Main St, New York, NY"
-          required
-        />
-      </mat-form-field>
-      <div>
-        <button mat-button matStepperPrevious>Back</button>
-        <button mat-button matStepperNext>Next</button>
-      </div>
-    </form>
-  </mat-step>
-  <mat-step>
-    <ng-template matStepLabel>Done</ng-template>
-    <p>You are now done.</p>
-    <div>
-      <button mat-button matStepperPrevious>Back</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
-    </div>
-  </mat-step>
-</mat-stepper>
+    </mat-step>
+  </mat-stepper>
+</div>

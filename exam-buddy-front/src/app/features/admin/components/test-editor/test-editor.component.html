@@ -1,0 +1,42 @@
+<mat-card appearance="outlined">
+  <mat-card-content class="p-0 h-[calc(100vh-2rem)]">
+    <mat-tab-group (selectedTabChange)="onTabChange($event)">
+      <div *ngFor="let testSection of test()?.testSections">
+        <mat-tab label="{{ testSection?.subject?.name }}">
+          <div class="flex flex-col">
+            <ng-container
+              *ngIf="testSection?.questions?.length; else noQuestions"
+            >
+              <div class="overflow-auto flex-1 p-4 max-h-[calc(100vh-10rem)]">
+                <ng-container
+                  *ngFor="let question of testSection.questions; let i = index"
+                >
+                  <div class="flex items-center gap-2 my-1 p-2 rounded-md">
+                    <span> {{ i + 1 }} {{ "." }} </span>
+                    <p>{{ question.description }}</p>
+                  </div>
+                </ng-container>
+              </div>
+            </ng-container>
+
+            <ng-template #noQuestions>
+              <div
+                class="flex-1 flex flex-col justify-center items-center overflow-hidden"
+              >
+                <img src="assets/images/no-question.webp" />
+                <p class="text-xl text-center font-semibold text-gray-400 mt-4">
+                  No questions are added for this section.
+                </p>
+              </div>
+            </ng-template>
+          </div>
+        </mat-tab>
+      </div>
+    </mat-tab-group>
+    <mat-card-footer class="absolute bottom-4 right-4">
+      <button mat-flat-button (click)="navigateToAddQuestionPage()">
+        Add Question
+      </button>
+    </mat-card-footer>
+  </mat-card-content>
+</mat-card>

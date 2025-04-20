@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { IExam } from '../../models';
+import { IExam } from '@shared/models';
 @Component({
   selector: 'app-exam-card',
   imports: [MatCardModule],

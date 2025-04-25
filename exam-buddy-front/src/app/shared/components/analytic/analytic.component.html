@@ -1,0 +1,127 @@
+<div class="max-w-[1024px] m-auto mt-4 font-semibold">
+  <h1 class="text-lg">Overall Performance Summary</h1>
+  <div class="border border-gray-200 flex justify-between px-4 rounded-lg mt-4">
+    <div class="p-4 flex items-center gap-2">
+      <div
+        class="h-12 w-12 bg-red-400 rounded-full flex items-center justify-center text-white"
+      >
+        <mat-icon>military_tech</mat-icon>
+      </div>
+      <div class="flex flex-col">
+        <p>
+          {{ testAnalysis().rankOfUser
+          }}<span class="custom-text-style"
+            >/{{ testAnalysis().rankOutOf }}</span
+          >
+        </p>
+        <span class="custom-text-style"> Rank </span>
+      </div>
+    </div>
+    <div class="p-2 flex items-center gap-2">
+      <div
+        class="h-12 w-12 bg-purple-400 rounded-full flex items-center justify-center text-white"
+      >
+        <span class="material-symbols-outlined"> trophy </span>
+      </div>
+      <div class="flex flex-col">
+        <p>
+          <span>{{ totalMarksObtained() }} </span>
+          <span class="custom-text-style">/{{ totalMarks() }}</span>
+        </p>
+        <span class="custom-text-style"> Score </span>
+      </div>
+    </div>
+    <div class="p-2 flex items-center gap-2">
+      <div
+        class="h-12 w-12 bg-cyan-400 rounded-full flex items-center justify-center text-white"
+      >
+        <mat-icon>receipt_long</mat-icon>
+      </div>
+      <div class="flex flex-col">
+        <p>
+          <span> {{ totalAttemptedQuestions() }} </span>
+          <span class="custom-text-style">/{{ totalQuestions() }}</span>
+        </p>
+        <span class="custom-text-style"> Attempted </span>
+      </div>
+    </div>
+    <div class="p-2 flex items-center gap-2">
+      <div
+        class="h-12 w-12 bg-green-400 rounded-full flex items-center justify-center text-white"
+      >
+        <span class="material-symbols-outlined"> target </span>
+      </div>
+      <p class="flex flex-col">
+        <span>
+          {{ avgAccuracy() | percent : "1.0-0" }}
+        </span>
+        <span class="custom-text-style"> Accuracy </span>
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="max-w-[1024px] m-auto mt-12 mb-4">
+  <h1 class="text-lg font-semibold">Sectional Summary</h1>
+  <div class="border border-gray-100 mt-4 rounded-lg">
+    <!-- Table Header -->
+    <div class="flex text-sm text-gray-600">
+      <p class="w-[30%] border border-gray-100 p-4">Section Name</p>
+      <p class="w-[15%] border border-gray-100 p-4">Score</p>
+      <p class="w-[15%] border border-gray-100 p-4">Attempted</p>
+      <p class="w-[15%] border border-gray-100 p-4">Accuracy</p>
+      <p class="w-[25%] border border-gray-100 p-4">Time</p>
+    </div>
+
+    <!-- Table Body -->
+    <div
+      *ngFor="let subjectScore of testAnalysis().subjectScores"
+      class="flex hover:bg-gray-50"
+    >
+      <p class="w-[30%] border border-gray-100 p-4">
+        {{ subjectScore.subject.name }}
+      </p>
+      <p class="w-[15%] border border-gray-100 p-4">
+        <span>{{ subjectScore.marksObtained }}</span> /
+        <span class="text-sm text-gray-400">{{ totalMarks() }}</span>
+      </p>
+      <p class="w-[15%] border border-gray-100 p-4">
+        <span>{{ subjectScore.attemptedQuestions }}</span> /
+        <span class="text-sm text-gray-600">{{
+          subjectScore.totalQuestions
+        }}</span>
+      </p>
+      <p class="w-[15%] border border-gray-100 p-4">
+        {{ subjectScore.accuracy | percent : "1.0-0" }}
+      </p>
+      <p class="w-[25%] border border-gray-100 p-4">
+        <span>{{ changeSecondsToMinutes(subjectScore.timeTakenSeconds) }}</span>
+        /
+        <span class="text-sm text-gray-600">{{ totalTime() }}</span>
+      </p>
+    </div>
+
+    <!-- Table Footer -->
+    <div class="flex hover:bg-gray-50">
+      <p class="w-[30%] border border-gray-100 p-4 font-semibold">Overall</p>
+      <p class="w-[15%] border border-gray-100 p-4">
+        <span class="font-semibold">{{ totalMarksObtained() }}</span> /
+        <span class="text-sm text-gray-600">{{ totalMarks() }}</span>
+      </p>
+      <p class="w-[15%] border border-gray-100 p-4">
+        <span class="font-semibold">{{ totalAttemptedQuestions() }}</span> /
+        <span class="text-sm text-gray-600">{{ totalQuestions() }}</span>
+      </p>
+      <p class="w-[15%] border border-gray-100 p-4 font-semibold">
+        {{ avgAccuracy() | percent : "1.0-0" }}
+      </p>
+      <p class="w-[25%] border border-gray-100 p-4">
+        <span class="font-semibold">{{
+          changeSecondsToMinutes(totalTimeTaken())
+        }}</span>
+        /
+        <span class="text-sm text-gray-600">{{ totalTime() }}</span>
+      </p>
+    </div>
+  </div>
+</div>

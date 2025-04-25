@@ -3,16 +3,18 @@ import { ISubject, ITopic } from "./subject";
 
 export interface ITestAnalysis {
     testName: string;
-    rank: number;
+    rankOfUser: number;
+    rankOutOf: number;
     subjectScores: ISubjectScore[];
     topicAnalysis: ITopicAnalysis[];
 }
 
 export interface ISubjectScore {
     subject: ISubject;
-    score: number;
-    maxScore: number;
+    marksObtained: number;
+    totalMarks: number;
     timeTakenSeconds: number;
+    totalTimeSeconds: number;
     accuracy: number;
     attemptedQuestions: number;
     totalQuestions: number;

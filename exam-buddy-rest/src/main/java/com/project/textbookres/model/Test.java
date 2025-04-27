@@ -30,6 +30,10 @@ public class Test {
     @JoinColumn(name = "exam_id")
     private Exam exam;
 
+    @ManyToOne
+    @JsonIgnore
+    private User user;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TestSection> testSections = new ArrayList<>();
 

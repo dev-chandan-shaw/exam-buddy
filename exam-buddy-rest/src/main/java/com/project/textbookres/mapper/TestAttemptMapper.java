@@ -12,6 +12,7 @@ public class TestAttemptMapper {
     public ActiveTestResponse toActiveTestResponse(TestAttempt attempt) {
         ActiveTestResponse dto = new ActiveTestResponse();
         dto.setId(attempt.getId());
+        dto.setTestId(attempt.getTest().getId());
         dto.setStartTime(attempt.getStartTime());
         dto.setCompleted(attempt.isCompleted());
         dto.setTestSections(
@@ -65,4 +66,6 @@ public class TestAttemptMapper {
         dto.setDescription(option.getDescription());
         return dto;
     }
+
+
 }

@@ -7,5 +7,8 @@ import java.util.List;
 
 public interface TestRepository extends JpaRepository<Test, Long> {
     List<Test> findByExamId(Long examId);
+    List<Test> findByExamIdAndUserId(Long examId, Long userId);
     List<Test> findByPublished(boolean published);
+
+    List<Test> findByUserIdAndPublished(long userId, boolean published);
 }

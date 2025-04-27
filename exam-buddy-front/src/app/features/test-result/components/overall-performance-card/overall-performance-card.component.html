@@ -1,0 +1,77 @@
+<h1 class="text-lg font-semibold">Overall Performance Summary</h1>
+<mat-card appearance="outlined" class="mt-4">
+  <mat-card-content>
+    <div class="grid grid-cols-2 md:grid-cols-5">
+      <div class="p-2 flex items-center gap-2">
+        <div
+          class="h-12 w-12 bg-red-400 rounded-full flex items-center justify-center text-white"
+        >
+          <mat-icon>military_tech</mat-icon>
+        </div>
+        <div class="flex flex-col">
+          <p>
+            {{ testResult()?.rankOfUser }}
+            <span class="custom-text-style"
+              >{{ " / " }}{{ testResult()?.rankOutOf }}</span
+            >
+          </p>
+          <span class="custom-text-style"> Rank </span>
+        </div>
+      </div>
+      <div class="p-2 flex items-center gap-2">
+        <div
+          class="h-12 w-12 bg-purple-400 rounded-full flex items-center justify-center text-white"
+        >
+          <span class="material-symbols-outlined"> trophy </span>
+        </div>
+        <div class="flex flex-col">
+          <p>
+            <span>{{ totalMarksObtained() }} </span>
+            <span class="custom-text-style"
+              >{{ " / " }} {{ totalMarks() }}</span
+            >
+          </p>
+          <span class="custom-text-style"> Score </span>
+        </div>
+      </div>
+      <div class="p-2 flex items-center gap-2">
+        <div
+          class="h-12 w-12 bg-cyan-400 rounded-full flex items-center justify-center text-white"
+        >
+          <mat-icon>receipt_long</mat-icon>
+        </div>
+        <div class="flex flex-col">
+          <p>
+            <span> {{ totalAttemptedQuestion() }} </span>
+            <span class="custom-text-style"
+              >{{ " / " }} {{ totalQuestions() }}</span
+            >
+          </p>
+          <span class="custom-text-style"> Attempted </span>
+        </div>
+      </div>
+      <div class="p-2 flex items-center gap-2">
+        <div
+          class="h-12 w-12 bg-green-400 rounded-full flex items-center justify-center text-white"
+        >
+          <span class="material-symbols-outlined"> target </span>
+        </div>
+        <p class="flex flex-col">
+          <span> {{ avgAccuracy() | number : "1.2-2" }}% </span>
+          <span class="custom-text-style"> Accuracy </span>
+        </p>
+      </div>
+      <div class="p-2 flex items-center gap-2">
+        <div
+          class="h-12 w-12 bg-indigo-400 rounded-full flex items-center justify-center text-white"
+        >
+          <span class="material-symbols-outlined"> tenancy </span>
+        </div>
+        <p class="flex flex-col">
+          <span> {{ testResult()?.percentile | number : "1.2-2" }}% </span>
+          <span class="custom-text-style"> Percential </span>
+        </p>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

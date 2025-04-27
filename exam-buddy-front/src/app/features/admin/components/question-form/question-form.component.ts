@@ -15,6 +15,7 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { CreateQuestion } from '../../models/question';
 import { QuestionService } from '@core/services/question.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 @Component({
   selector: 'app-question-form',
   imports: [
@@ -25,6 +26,7 @@ import { ActivatedRoute, Router } from '@angular/router';
     CommonModule,
     MatSelectModule,
     MatButtonModule,
+    MatCheckboxModule,
   ],
   templateUrl: './question-form.component.html',
   styleUrl: './question-form.component.scss',

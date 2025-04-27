@@ -1,0 +1,17 @@
+<mat-card appearance="outlined" class="mb-4">
+  <mat-card-content>
+    <mat-tab-group
+      (selectedIndexChange)="onTabChange($event)"
+      [selectedIndex]="data().length - 1"
+    >
+      @for (attempt of data() ; track $index) {
+      <mat-tab label="Attempt {{ $index + 1 }}">
+        <p class="p-4">
+          Attempt {{ $index + 1 }} was made on
+          {{ attempt.attemptedAt | date : "MMM dd, h:mm a" }}
+        </p>
+      </mat-tab>
+      }
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>

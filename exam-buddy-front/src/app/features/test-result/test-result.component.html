@@ -1,0 +1,11 @@
+<div class="max-w-[1024px] m-auto mt-4">
+  @if (attemptInfo()) {
+  <app-attemp-info-card
+    (tabChange)="onTabChange($event)"
+    [data]="attemptInfo()"
+    class="mb-4"
+  />
+  }
+  <app-overall-performance-card [testResult]="testResult()" class="mb-4" />
+  <app-section-summary-table [testResult]="testResult()" class="mb-4" />
+</div>

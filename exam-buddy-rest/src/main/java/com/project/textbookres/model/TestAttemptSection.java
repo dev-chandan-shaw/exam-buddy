@@ -21,6 +21,10 @@ public class TestAttemptSection {
 
     private int totalTime;
 
+    private int totalAttemptedQuestions;
+
+    private int accuracy;
+
     @ManyToOne
     private Subject subject;
 

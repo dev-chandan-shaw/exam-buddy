@@ -18,10 +18,11 @@ import {
 import { TimeFormatPipe } from '@core/pipes/time-format.pipe';
 import { ActiveTestService } from '../../services/active-est.service';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-question-viewer',
-  imports: [TimeFormatPipe, FormsModule],
+  imports: [TimeFormatPipe, FormsModule, CommonModule],
   templateUrl: './question-viewer.component.html',
   styleUrl: './question-viewer.component.scss',
 })
@@ -51,11 +52,10 @@ export class QuestionViewerComponent implements OnChanges, OnDestroy {
     });
   }
   ngOnChanges(): void {
-    alert(this.questionState().timeTakenSeconds);
-    clearInterval(this._timer);
-    this._timer = setInterval(() => {
-      this.questionState().timeTakenSeconds++;
-    }, 1000);
+    // clearInterval(this._timer);
+    // this._timer = setInterval(() => {
+    //   this.questionState().timeTakenSeconds++;
+    // }, 1000);
   }
   ngOnDestroy(): void {
     clearInterval(this._timer);

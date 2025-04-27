@@ -92,5 +92,11 @@ public class QuestionController {
         return ResponseEntity.ok(question);
     }
 
+    @DeleteMapping
+    public ResponseEntity<?> deleteAllQuestions() {
+        questionRepository.deleteAll();
+        return ResponseEntity.ok("Deleted all questions");
+    }
+
 }
 

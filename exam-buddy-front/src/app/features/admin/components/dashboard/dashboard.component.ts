@@ -33,10 +33,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this._examService.getExams().subscribe((exams) => this.exams.set(exams));
     this._testsService.getAllTests().subscribe((tests: ITest[]) => {
-      const unpublished = tests.filter((test) => !test.published);
-      const published = tests.filter((test) => test.published);
-      this.unpublishedTests.set(unpublished);
-      this.publishedTests.set(published);
+      this.publishedTests.set(tests);
     });
   }
 

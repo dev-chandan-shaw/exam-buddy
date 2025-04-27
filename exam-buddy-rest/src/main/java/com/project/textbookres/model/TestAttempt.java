@@ -37,6 +37,8 @@ public class TestAttempt {
 
     private boolean completed;
 
+    private double marksObtained;
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<TestAttemptSection> testSections = new ArrayList<>();
 }

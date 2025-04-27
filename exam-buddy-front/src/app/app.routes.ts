@@ -3,8 +3,7 @@ export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    loadComponent: () =>
-      import('./features/exam/exam.component').then((m) => m.ExamComponent),
+    redirectTo: 'exam',
   },
   {
     path: 'exam',
@@ -24,8 +23,14 @@ export const routes: Routes = [
       ),
   },
   {
-    path: '**',
-    redirectTo: 'exam',
-    // Note: Cannot use canActivate here either
+    path: 'test-analysis/:testId',
+    loadComponent: () =>
+      import('./features/test-result/test-result.component').then(
+        (m) => m.TestResultComponent
+      ),
   },
+  // {
+  //   path: '**',
+  //   redirectTo: 'exam',
+  // },
 ];

@@ -1,7 +1,7 @@
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { TestService } from '@core/services/test.service';
-import { ITest } from '@shared/models';
+import { ITest, ITestInfo } from '@shared/models';
 import { TestCardComponent } from '../components/test-card/test-card.component';
 import { CommonModule } from '@angular/common';
 
@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './test.component.scss',
 })
 export class TestComponent implements OnInit {
-  testList = signal<ITest[]>([]);
+  testList = signal<ITestInfo[]>([]);
   private _route = inject(ActivatedRoute);
   private _testService = inject(TestService);
   ngOnInit(): void {

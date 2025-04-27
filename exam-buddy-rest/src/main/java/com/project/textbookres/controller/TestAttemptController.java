@@ -4,10 +4,13 @@ import com.project.textbookres.dto.ActiveTestResponse;
 import com.project.textbookres.dto.QuestionStatus;
 import com.project.textbookres.dto.StartTestRequest;
 import com.project.textbookres.dto.TestAttemptQuestionStateUpdateRequest;
+import com.project.textbookres.model.test_analysis.TestAnalysis;
 import com.project.textbookres.mapper.TestAttemptMapper;
 import com.project.textbookres.model.*;
 import com.project.textbookres.respository.*;
 import com.project.textbookres.service.ActiveTestService;
+import com.project.textbookres.service.AttemptInfoService;
+import com.project.textbookres.service.TestAnalysisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -38,14 +41,18 @@ public class TestAttemptController {
     @Autowired
     private TestAttemptRepository testAttemptRepository;
 
-
-
     @Autowired
     private ActiveTestService activeTestService;
 
     @Autowired
     private TestAttemptMapper testAttemptMapper;
 
+
+    @Autowired
+    private AttemptInfoService attemptInfoService;
+
+    @Autowired
+    private TestAnalysisService testAnalysisService;
 
 
     @PostMapping("/start")
@@ -104,7 +111,6 @@ public class TestAttemptController {
 
         TestAttemptQuestionState testAttemptQuestionState = optionalTestAttemptQuestionState.get();
 
-
         testAttemptSection.setTimeTakenSeconds(request.getSectionTimeTakenSeconds());
         testAttemptQuestionState.setStatus(request.getQuestionStatus());
         testAttemptQuestionState.setTimeTakenSeconds(request.getTimeTakenSeconds());
@@ -126,9 +132,14 @@ public class TestAttemptController {
         return ResponseEntity.ok(activeTestResponse);
     }
 
-    @GetMapping("/user")
-    public List<TestAttempt> getActiveTestsByUserIdAndTestId(@RequestParam long userId, @RequestParam long testId) {
-        return testAttemptRepository.findByTestIdAndUserId(userId, testId);
+    @GetMapping("/attempted")
+    public TestAttempt getAttemptedTest(@RequestParam long testAttemptId) {
+        return testAttemptRepository.findById(testAttemptId).get();
+    }
+
+    @GetMapping
+    public List<TestAttempt> getAttemptedTests() {
+        return testAttemptRepository.findAll();
     }
 
     @PutMapping("/finish")
@@ -139,29 +150,60 @@ public class TestAttemptController {
         }
         TestAttempt testAttempt = optionalActiveTest.get();
         int marksPerQuestion = testAttempt.getTest().getExam().getMarksPerQuestion();
-        double negativeMarking = testAttempt.getTest().getExam().getNegativeMark();
+        double negativeMarking = -testAttempt.getTest().getExam().getNegativeMark();
+        double testTotalMarksObtained = 0.0;
         for (TestAttemptSection testAttemptSection: testAttempt.getTestSections()) {
-            double totalMarksObtained = 0.0;
+            int sectionTotalAttemptedQuestions = 0;
+            int sectionTotalCorrectAnswers = 0;
+            double sectionTotalMarksObtained = 0.0;
             for (TestAttemptQuestionState testAttemptQuestionState: testAttemptSection.getQuestions()) {
                 QuestionStatus status = testAttemptQuestionState.getStatus();
-                if (status == QuestionStatus.ANSWERED || status == QuestionStatus.MARKED_AND_ANSWERED) {
-                    boolean isCorrect = testAttemptQuestionState
-                            .getQuestion()
-                            .getOptions()
-                            .stream()
-                            .anyMatch(option -> option.getId() == testAttemptQuestionState.getSelectedOptionId() && option.isCorrect());
-                    if (isCorrect) {
-                        totalMarksObtained += marksPerQuestion;
-                    } else {
-                        totalMarksObtained -= negativeMarking;
-                    }
+                boolean isAttempted = status == QuestionStatus.ANSWERED || status == QuestionStatus.MARKED_AND_ANSWERED;
+                boolean isCorrect = testAttemptQuestionState.getQuestion().getOptions().stream().anyMatch(option -> option.getId() == testAttemptQuestionState.getSelectedOptionId() && option.isCorrect());
+                sectionTotalAttemptedQuestions += isAttempted ? 1 : 0;
+                sectionTotalCorrectAnswers += isAttempted && isCorrect ? 1 : 0;
+                if (isAttempted) {
+                    sectionTotalMarksObtained += isCorrect ? marksPerQuestion : negativeMarking;
                 }
             }
-            testAttemptSection.setMarksObtained(totalMarksObtained);
+            testTotalMarksObtained += sectionTotalMarksObtained;
+            int accuracy = sectionTotalAttemptedQuestions == 0 ? 0 : (sectionTotalCorrectAnswers * 100) / sectionTotalAttemptedQuestions;
+            testAttemptSection.setAccuracy(accuracy);
+            testAttemptSection.setTotalAttemptedQuestions(sectionTotalAttemptedQuestions);
+            testAttemptSection.setMarksObtained(sectionTotalMarksObtained);
         }
+
         testAttempt.setCompleted(true);
+        testAttempt.setMarksObtained(testTotalMarksObtained);
         testAttemptSectionRepository.saveAll(testAttempt.getTestSections());
         testAttemptRepository.save(testAttempt);
+        attemptInfoService.saveAttemptInfo(testAttempt);
+        testAnalysisService.generateTestAnalysis(testAttempt);
         return ResponseEntity.ok(testAttempt);
     }
+
+    @GetMapping("/{testId}/attempted")
+    public ResponseEntity<?> isTestAttempted(@PathVariable long testId) {
+        long userId = 1;
+        List<TestAttempt> attempts = testAttemptRepository.findByUserIdAndTestId(userId, testId);
+        return ResponseEntity.ok(!attempts.isEmpty());
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteTestAttempt(@PathVariable long id) {
+        Optional<TestAttempt> optionalTestAttempt = testAttemptRepository.findById(id);
+        if (optionalTestAttempt.isEmpty()) {
+            return ResponseEntity.badRequest().body("Test attempt not found with id " + id);
+        }
+        TestAttempt testAttempt = optionalTestAttempt.get();
+        testAttemptRepository.delete(testAttempt);
+        return ResponseEntity.ok("Test attempt deleted successfully");
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteAllTestAttempts() {
+        testAttemptRepository.deleteAll();
+        return ResponseEntity.ok("All test attempts deleted successfully");
+    }
+
 }

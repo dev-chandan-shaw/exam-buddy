@@ -48,25 +48,11 @@
 
 <div class="mb-4">
   <h1 class="text-xl">Unpublished Tests</h1>
-  <ng-container *ngFor="let test of unpublishedTests(); let i = index">
+  <ng-container *ngFor="let test of publishedTests(); let i = index">
     <mat-card
       appearance="outlined"
       class="mt-4 cursor-pointer hover:bg-slate-100"
       [routerLink]="['test', test.id, 'draft']"
-    >
-      <mat-card-content>
-        <p>{{ test.title }}</p>
-      </mat-card-content>
-    </mat-card>
-  </ng-container>
-</div>
-
-<div *ngIf="publishedTests().length" class="mb-4">
-  <h1 class="text-xl">Published Tests</h1>
-  <ng-container *ngFor="let test of unpublishedTests(); let i = index">
-    <mat-card
-      appearance="outlined"
-      class="mt-4 cursor-pointer hover:bg-slate-100"
     >
       <mat-card-content>
         <p>{{ test.title }}</p>

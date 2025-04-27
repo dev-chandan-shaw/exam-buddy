@@ -1,12 +1,26 @@
-import { ITestAnalysis } from "@shared/models/test-analysis";
+import { ITestAnalysis } from '@shared/models/test-analysis';
 
 export const TEST_ANALYSIS_DATA: ITestAnalysis = {
   testName: 'Midterm Assessment - Grade 10',
   rankOfUser: 5,
   rankOutOf: 100,
+  attempts: [
+    {
+      attempId: 1,
+      attemptDate: new Date(),
+    },
+    {
+      attempId: 2,
+      attemptDate: new Date(),
+    },
+    {
+      attempId: 3,
+      attemptDate: new Date(),
+    },
+  ],
   subjectScores: [
     {
-      subject: { name: 'Mathematics', },
+      subject: { name: 'Mathematics' },
       marksObtained: 78,
       totalMarks: 100,
       timeTakenSeconds: 3200,
@@ -16,7 +30,7 @@ export const TEST_ANALYSIS_DATA: ITestAnalysis = {
       totalQuestions: 25,
     },
     {
-      subject: { name: 'Science'},
+      subject: { name: 'Science' },
       marksObtained: 85,
       totalMarks: 100,
       timeTakenSeconds: 3300,
@@ -46,7 +60,5 @@ export const TEST_ANALYSIS_DATA: ITestAnalysis = {
       totalQuestions: 25,
     },
   ],
-  topicAnalysis: [
-    
-  ],
+  topicAnalysis: [],
 };

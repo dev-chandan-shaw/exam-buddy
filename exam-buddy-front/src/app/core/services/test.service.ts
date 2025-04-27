@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { ITest } from '@shared/models';
+import { ITest, ITestInfo } from '@shared/models';
 import { environment } from 'app/environments/environment';
 import { CreateTestRequest } from 'app/features/admin/models/create-test';
 
@@ -16,13 +16,13 @@ export class TestService {
   }
 
   getTestByPublish(isPublished: boolean) {
-    return this.http.get<ITest[]>(
-      this.baseUrl + `tests/test?isPublished=${isPublished}`
-    );
+    return this.http.get<ITest[]>(this.baseUrl + `tests/unpublished`);
   }
 
   getAllTestsByExamId(id: number) {
-    return this.http.get<ITest[]>(this.baseUrl + `tests/test?examId=${id}`);
+    return this.http.get<ITestInfo[]>(
+      this.baseUrl + `tests/filter?examId=${id}`
+    );
   }
 
   getAllTests() {
@@ -30,6 +30,6 @@ export class TestService {
   }
 
   getTestById(id: number) {
-    return this.http.get<ITest>(this.baseUrl + `tests/test/${id}`);
+    return this.http.get<ITest>(this.baseUrl + `tests/${id}`);
   }
 }

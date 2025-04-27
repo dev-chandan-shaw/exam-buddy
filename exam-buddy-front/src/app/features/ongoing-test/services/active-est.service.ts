@@ -9,20 +9,21 @@ import {
 import { OngoingTestApiService } from './api/ongoing-test-api.service';
 import { Router } from '@angular/router';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class ActiveTestService {
   private _router = inject(Router);
   private activeTest = signal<IActiveTest>({} as IActiveTest);
   private activeTestApiService = inject(OngoingTestApiService);
+
   private currentQuestionIndex = signal(0);
   private lastQuestionState = linkedSignal(
-    () => this.currentSection()?.questions[0]
+    () => this.currentSection()?.questions?.[0]
   );
   private currentSection = linkedSignal(
-    () => this.activeTest()?.testSections[0]
+    () => this.activeTest()?.testSections?.[0]
   );
   private currentQuestionState = linkedSignal(
-    () => this.currentSection()?.questions[0]
+    () => this.currentSection()?.questions?.[0]
   );
   private lastSectionQuestionStates = linkedSignal(() => {
     const map = new Map<number, ActiveTestQuestionState>();
@@ -120,8 +121,12 @@ export class ActiveTestService {
     this.activeTestApiService.submitTest().subscribe((res) => {
       console.log(res);
       alert('test submitted');
-      this._router.navigate(['exam']);
+      this._router.navigate(['test-analysis', this.activeTest().testId]);
     });
+  }
+
+  reset() {
+    this.currentQuestionIndex.set(0);
   }
 
   getMarkedQuestionStatusCount() {

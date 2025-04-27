@@ -4,6 +4,7 @@ export interface IActiveTest {
   id: number;
   startTime: string;
   completed: boolean;
+  testId: number;
   testSections: ActiveTestSection[];
 }
 

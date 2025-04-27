@@ -12,10 +12,11 @@ import { QuestionViewerComponent } from '../question-viewer/question-viewer.comp
 import { QuesitonNavPanelComponent } from '../quesiton-nav-panel/quesiton-nav-panel.component';
 import { ActiveTestSection } from '../../models/active-test';
 import { ActiveTestService } from '../../services/active-est.service';
+import { TimeFormatPipe } from '@core/pipes/time-format.pipe';
 
 @Component({
   selector: 'app-section-container',
-  imports: [QuestionViewerComponent],
+  imports: [QuestionViewerComponent, TimeFormatPipe],
   templateUrl: './section-container.component.html',
   styleUrl: './section-container.component.scss',
 })
@@ -27,10 +28,10 @@ export class SectionContainerComponent implements OnDestroy {
   constructor() {
     effect(() => {
       clearInterval(this._timer);
-      const currentState = this.testSection();
-      if (!currentState) return;
+
+      if (!this.testSection()) return;
       this._timer = setInterval(() => {
-        currentState.timeTakenSeconds++;
+        this.testSection().timeTakenSeconds++;
       }, 1000);
     });
   }

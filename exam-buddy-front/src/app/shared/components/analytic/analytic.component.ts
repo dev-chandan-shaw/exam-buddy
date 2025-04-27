@@ -2,10 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, input, linkedSignal, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { ITestAnalysis } from '@shared/models/test-analysis';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-analytic',
-  imports: [CommonModule, MatIconModule],
+  imports: [CommonModule, MatIconModule, MatTabsModule, MatCardModule],
   templateUrl: './analytic.component.html',
   styleUrl: './analytic.component.scss',
 })
@@ -45,12 +47,14 @@ export class AnalyticComponent {
     );
   });
   avgAccuracy = linkedSignal(() => {
-    const totalAccuracySum =  this.testAnalysis()?.subjectScores.reduce(
+    const totalAccuracySum = this.testAnalysis()?.subjectScores.reduce(
       (acc, curr) => acc + curr.accuracy,
       0
-    )
-    return totalAccuracySum ? totalAccuracySum / this.testAnalysis()?.subjectScores.length : 0;
-  })
+    );
+    return totalAccuracySum
+      ? totalAccuracySum / this.testAnalysis()?.subjectScores.length
+      : 0;
+  });
 
   totalAttemptedQuestions = linkedSignal(() => {
     return (

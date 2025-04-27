@@ -1,5 +1,7 @@
 package com.project.textbookres.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project.textbookres.dto.QuestionStatus;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,4 +22,8 @@ public class TestAttemptQuestionState {
     private long selectedOptionId;
 
     private int timeTakenSeconds;
+
+    @JsonProperty("isCorrect")
+    @JsonIgnore
+    private boolean correct;
 }

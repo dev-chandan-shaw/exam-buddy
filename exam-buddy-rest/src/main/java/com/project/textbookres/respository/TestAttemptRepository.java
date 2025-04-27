@@ -9,5 +9,9 @@ import java.util.Optional;
 public interface TestAttemptRepository extends JpaRepository<TestAttempt, Long> {
     Optional<TestAttempt> findByUserIdAndCompleted(long userId, boolean completed);
     List<TestAttempt> findByTestIdAndUserId(long testId, long userId);
+
+    List<TestAttempt> findByUserIdAndTestId(long userId, long testId);
+
+    List<TestAttempt> findByTestIdOrderByMarksObtainedDesc(long testId);
 }
 

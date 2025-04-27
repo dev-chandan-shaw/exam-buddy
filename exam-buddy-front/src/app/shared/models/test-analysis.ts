@@ -1,41 +1,45 @@
-import { IQuestion } from "./question";
-import { ISubject, ITopic } from "./subject";
+import { IQuestion } from './question';
+import { ISubject, ITopic } from './subject';
 
 export interface ITestAnalysis {
-    testName: string;
-    rankOfUser: number;
-    rankOutOf: number;
-    subjectScores: ISubjectScore[];
-    topicAnalysis: ITopicAnalysis[];
+  testName: string;
+  rankOfUser: number;
+  rankOutOf: number;
+  subjectScores: ISubjectScore[];
+  topicAnalysis: ITopicAnalysis[];
+  attempts: IAttemptData[];
 }
 
 export interface ISubjectScore {
-    subject: ISubject;
-    marksObtained: number;
-    totalMarks: number;
-    timeTakenSeconds: number;
-    totalTimeSeconds: number;
-    accuracy: number;
-    attemptedQuestions: number;
-    totalQuestions: number;
+  subject: ISubject;
+  marksObtained: number;
+  totalMarks: number;
+  timeTakenSeconds: number;
+  totalTimeSeconds: number;
+  accuracy: number;
+  attemptedQuestions: number;
+  totalQuestions: number;
 }
 
 export interface ITopicAnalysis {
-    topic: ITopic;
-    questions: ITopicQuestion[];
+  topic: ITopic;
+  questions: ITopicQuestion[];
 }
 
-export interface ITopicQuestion{
-    question: IQuestion;
-    questionNumber: number;
-    isAttempted: boolean;
-    isCorrect: boolean;
+export interface ITopicQuestion {
+  question: IQuestion;
+  questionNumber: number;
+  isAttempted: boolean;
+  isCorrect: boolean;
 }
-
-
 
 interface questionAnalysis {
-    totalAttempt: number;
-    averageTime: number;
-    accuracy: number;
+  totalAttempt: number;
+  averageTime: number;
+  accuracy: number;
+}
+
+interface IAttemptData {
+  attempId: number;
+  attemptDate: Date;
 }

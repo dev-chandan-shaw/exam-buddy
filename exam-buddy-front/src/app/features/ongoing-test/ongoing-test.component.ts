@@ -13,6 +13,7 @@ import { ActiveTestService } from './services/active-est.service';
   imports: [QuesitonNavPanelComponent, CommonModule, SectionContainerComponent],
   templateUrl: './ongoing-test.component.html',
   styleUrl: './ongoing-test.component.scss',
+  providers: [ActiveTestService],
 })
 export class OngoingTestComponent implements OnInit {
   test = signal<IActiveTest>({} as IActiveTest);

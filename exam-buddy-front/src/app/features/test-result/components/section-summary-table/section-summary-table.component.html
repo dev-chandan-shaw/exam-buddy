@@ -1,0 +1,67 @@
+<div class="max-w-[1024px] m-auto mt-4 mb-4">
+  <h1 class="text-lg font-semibold">Sectional Summary</h1>
+  <mat-card appearance="outlined" class="mt-4">
+    <div class="rounded-lg">
+      <div class="flex text-sm text-gray-600">
+        <p class="w-[30%] border border-gray-100 p-4">Section Name</p>
+        <p class="w-[15%] border border-gray-100 p-4">Score</p>
+        <p class="w-[15%] border border-gray-100 p-4">Attempted</p>
+        <p class="w-[15%] border border-gray-100 p-4">Accuracy</p>
+        <p class="w-[25%] border border-gray-100 p-4">Time</p>
+      </div>
+
+      <div
+        *ngFor="let subjectScore of testResult()?.subjectStats"
+        class="flex hover:bg-gray-50"
+      >
+        <p class="w-[30%] border border-gray-100 p-4">
+          {{ subjectScore.subject.name }}
+        </p>
+        <p class="w-[15%] border border-gray-100 p-4">
+          <span>{{ subjectScore.marksObtained }}</span>
+          <span class="text-sm text-gray-400">/{{ totalMarks() }}</span>
+        </p>
+        <p class="w-[15%] border border-gray-100 p-4">
+          <span>{{ subjectScore.totalAttemptedQuestions }}</span>
+          <span class="text-sm text-gray-400"
+            >/{{ subjectScore.totalQuestions }}</span
+          >
+        </p>
+        <p class="w-[15%] border border-gray-100 p-4">
+          {{ subjectScore.accuracy | number : "1.2-2" }}%
+        </p>
+        <p class="w-[25%] border border-gray-100 p-4">
+          <span>{{
+            changeSecondsToMinutes(subjectScore.timeTakenSeconds)
+          }}</span>
+
+          <span class="text-sm text-gray-400"
+            >/{{ subjectScore.totalTime }} min</span
+          >
+        </p>
+      </div>
+
+      <div class="flex hover:bg-gray-50">
+        <p class="w-[30%] border border-gray-100 p-4 font-semibold">Overall</p>
+        <p class="w-[15%] border border-gray-100 p-4">
+          <span class="font-semibold">{{ totalMarksObtained() }}</span>
+          <span class="text-sm text-gray-400">/{{ totalMarks() }}</span>
+        </p>
+        <p class="w-[15%] border border-gray-100 p-4">
+          <span class="font-semibold">{{ totalAttemptedQuestion() }}</span>
+          <span class="text-sm text-gray-400">/{{ totalQuestions() }}</span>
+        </p>
+        <p class="w-[15%] border border-gray-100 p-4 font-semibold">
+          {{ avgAccuracy() | number : "1.2-2" }}%
+        </p>
+        <p class="w-[25%] border border-gray-100 p-4">
+          <span class="font-semibold">{{
+            changeSecondsToMinutes(totalTimeTakenSeconds())
+          }}</span>
+
+          <span class="text-sm text-gray-400">/{{ totalTime() }} min</span>
+        </p>
+      </div>
+    </div>
+  </mat-card>
+</div>

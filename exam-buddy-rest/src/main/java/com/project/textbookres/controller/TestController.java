@@ -1,15 +1,12 @@
 package com.project.textbookres.controller;
 
 import com.project.textbookres.dto.CreateTestRequest;
+import com.project.textbookres.dto.TestDto;
 import com.project.textbookres.model.*;
-import com.project.textbookres.respository.ExamRepository;
-import com.project.textbookres.respository.QuestionRepository;
-import com.project.textbookres.respository.TestRepository;
-import com.project.textbookres.respository.TestSectionRepository;
+import com.project.textbookres.respository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +26,9 @@ public class TestController {
 
     @Autowired
     private TestSectionRepository testSectionRepository;
+
+    @Autowired
+    private TestAttemptRepository testAttemptRepository;
 
     @PostMapping
     private ResponseEntity<?> createTest(@RequestBody CreateTestRequest reqBody) {
@@ -64,19 +64,36 @@ public class TestController {
         return ResponseEntity.ok(test);
     }
 
+    @GetMapping("/unpublished")
+    public List<Test> getTestsByPublishStatus() {
+        long userId = 1L;
+        return testRepository.findByUserIdAndPublished(userId, false);
+    }
 
+    @GetMapping("/filter")
+    public ResponseEntity<?> getTestByExam(@RequestParam Long examId) {
+        List<Test> tests = testRepository.findByExamId(examId);
 
-    @GetMapping("/test")
-    public ResponseEntity<?> getNotPublishedTest(@RequestParam (required = false) Boolean isPublished, @RequestParam(required = false) Long examId) {
-        List<Test> tests;
-        if (isPublished != null) {
-            tests = testRepository.findByPublished(isPublished);
-        } else if (examId != null) {
-            tests = testRepository.findByExamId(examId);
-        } else {
-            return ResponseEntity.badRequest().body("Invalid request");
-        }
-        return ResponseEntity.ok(tests);
+        List<TestDto> testDtos = tests.stream().map(test -> {
+            List<TestAttempt> testAttempt = testAttemptRepository.findByTestIdAndUserId(test.getId(), 1L); // <- replace 1L later dynamically
+            boolean isAttempted = !testAttempt.isEmpty();
+            boolean isPaused = !testAttempt.isEmpty() && testAttempt.get(testAttempt.size() - 1).isPaused();
+            int totalQuestions = test.getTestSections().stream().mapToInt(testSection -> testSection.getQuestions().size()).sum();
+            return new TestDto(
+                    test.getId(),
+                    test.getTitle(),
+                    totalQuestions,
+                    test.getTotalMarks(),
+                    test.getTotalTime(),
+                    testAttempt.isEmpty() ? null : testAttempt.get(testAttempt.size() - 1).getStartTime(),
+                    test.isPyqTest(),
+                    test.isSectionTest(),
+                    isAttempted,
+                    isPaused
+            );
+        }).toList();
+
+        return ResponseEntity.ok(testDtos);
     }
 
     @GetMapping
@@ -85,7 +102,7 @@ public class TestController {
         return ResponseEntity.ok(testList);
     }
 
-    @GetMapping("/test/{testId}")
+    @GetMapping("/{testId}")
     public ResponseEntity<?> getTestById(@PathVariable long testId) {
         Optional<Test> test = testRepository.findById(testId);
         if (test.isEmpty()) return ResponseEntity.badRequest().body("Test not found with id " + testId);
@@ -98,24 +115,4 @@ public class TestController {
         return ResponseEntity.ok("Deleted Successfully");
     }
 
-
-
-
-//
-//    @GetMapping("/exam/{examId}")
-//    public ResponseEntity<?> getTestByExam(@PathVariable Long examId) {
-//        List<Test> testList = testRepository.findByExamId(examId);
-//        return ResponseEntity.ok(testList);
-//    }
-//
-//    @GetMapping("/test/{testId}")
-//    public ResponseEntity<?> getTestById(@PathVariable Long testId) {
-//        Test test = testRepository.findById(testId).get();
-//        return ResponseEntity.ok(test);
-//    }
-//
-//    @PostMapping("/upload")
-//    public List<Question> uploadExcel(@RequestParam("file") MultipartFile file, @RequestParam Long examId) {
-//        return excelReaderService.readExcelFile(file, examId);
-//    }
 }

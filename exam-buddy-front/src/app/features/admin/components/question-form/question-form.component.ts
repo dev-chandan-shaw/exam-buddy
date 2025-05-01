@@ -103,8 +103,8 @@ export class QuestionFormComponent implements OnInit {
     };
     this._questionService.addQuestion(question).subscribe((data) => {
       console.log(data);
-      this.questionDescriptionFromGroup.reset();
-      this._router.navigate([`admin/test/${this.testId()}/draft`]);
+      // this.questionDescriptionFromGroup.reset();
+      // this._router.navigate([`admin/test/${this.testId()}/draft`]);
     });
   }
 }

@@ -29,8 +29,15 @@ export const routes: Routes = [
         (m) => m.TestResultComponent
       ),
   },
-  // {
-  //   path: '**',
-  //   redirectTo: 'exam',
-  // },
+  {
+    path: 'test-solution/:testId',
+    loadComponent: () =>
+      import('./features/test-solution/test-solution.component').then(
+        (m) => m.TestSolutionComponent
+      ),
+  },
+  {
+    path: '**',
+    redirectTo: 'exam',
+  },
 ];

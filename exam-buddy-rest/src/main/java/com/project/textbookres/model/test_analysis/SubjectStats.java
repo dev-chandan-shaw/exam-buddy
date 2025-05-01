@@ -17,6 +17,7 @@ public class SubjectStats {
     private double marksObtained;
     private int timeTakenSeconds;
     private int totalTime;
+    private int totalCorrectQuestions;
     private int totalAttemptedQuestions;
     private int accuracy;
 }

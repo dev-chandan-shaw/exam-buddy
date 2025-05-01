@@ -42,7 +42,13 @@ export const getTotalQuestions = (testResult: TestResult): number => {
 
 export const getAvgAccuracy = (testResult: TestResult): number => {
   return (
-    testResult.subjectStats.reduce((acc, curr) => acc + curr.accuracy, 0) /
-    testResult.subjectStats.length
+    (getTotalCorrectQuestions(testResult) * 100) / getTotalQuestions(testResult)
+  );
+};
+
+export const getTotalCorrectQuestions = (testResult: TestResult): number => {
+  return testResult.subjectStats.reduce(
+    (acc, curr) => acc + curr.totalCorrectQuestions,
+    0
   );
 };

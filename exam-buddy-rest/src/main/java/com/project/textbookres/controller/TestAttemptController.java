@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,6 +54,9 @@ public class TestAttemptController {
 
     @Autowired
     private TestAnalysisService testAnalysisService;
+
+    @Autowired
+    private QuestionStatsRepository questionStatsRepository;
 
 
     @PostMapping("/start")
@@ -150,21 +154,28 @@ public class TestAttemptController {
         }
         TestAttempt testAttempt = optionalActiveTest.get();
         int marksPerQuestion = testAttempt.getTest().getExam().getMarksPerQuestion();
-        double negativeMarking = -testAttempt.getTest().getExam().getNegativeMark();
+        double negativeMarking = testAttempt.getTest().getExam().getNegativeMark();
         double testTotalMarksObtained = 0.0;
+        List<QuestionStats> questionStatsList = new ArrayList<>();
         for (TestAttemptSection testAttemptSection: testAttempt.getTestSections()) {
             int sectionTotalAttemptedQuestions = 0;
             int sectionTotalCorrectAnswers = 0;
             double sectionTotalMarksObtained = 0.0;
             for (TestAttemptQuestionState testAttemptQuestionState: testAttemptSection.getQuestions()) {
                 QuestionStatus status = testAttemptQuestionState.getStatus();
+                QuestionStats questionStats = testAttemptQuestionState.getQuestion().getQuestionStats();
                 boolean isAttempted = status == QuestionStatus.ANSWERED || status == QuestionStatus.MARKED_AND_ANSWERED;
                 boolean isCorrect = testAttemptQuestionState.getQuestion().getOptions().stream().anyMatch(option -> option.getId() == testAttemptQuestionState.getSelectedOptionId() && option.isCorrect());
                 sectionTotalAttemptedQuestions += isAttempted ? 1 : 0;
                 sectionTotalCorrectAnswers += isAttempted && isCorrect ? 1 : 0;
                 if (isAttempted) {
-                    sectionTotalMarksObtained += isCorrect ? marksPerQuestion : negativeMarking;
+                    sectionTotalMarksObtained += isCorrect ? marksPerQuestion : -negativeMarking;
+                    questionStats.setTotalAttempts(questionStats.getTotalAttempts() + 1);
                 }
+                questionStats.setTotalCorrect(questionStats.getTotalCorrect() + (isCorrect ? 1 : 0));
+                int avgTime = isCorrect ? (questionStats.getAvgTimeSeconds() * questionStats.getTotalAttempts() + testAttemptQuestionState.getTimeTakenSeconds()) / questionStats.getTotalAttempts() : questionStats.getAvgTimeSeconds();
+                questionStats.setAvgTimeSeconds(avgTime);
+                questionStatsList.add(questionStats);
             }
             testTotalMarksObtained += sectionTotalMarksObtained;
             int accuracy = sectionTotalAttemptedQuestions == 0 ? 0 : (sectionTotalCorrectAnswers * 100) / sectionTotalAttemptedQuestions;
@@ -179,6 +190,7 @@ public class TestAttemptController {
         testAttemptRepository.save(testAttempt);
         attemptInfoService.saveAttemptInfo(testAttempt);
         testAnalysisService.generateTestAnalysis(testAttempt);
+        questionStatsRepository.saveAll(questionStatsList);
         return ResponseEntity.ok(testAttempt);
     }
 

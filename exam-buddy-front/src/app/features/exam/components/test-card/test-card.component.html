@@ -25,7 +25,9 @@
       <button (click)="startTest()" mat-flat-button>Resume</button>
       } @else if (test().isAttempted) {
       <div class="flex gap-4">
-        <button mat-stroked-button>Solution</button>
+        <button mat-stroked-button [routerLink]="['/test-solution', test().id]">
+          Solution
+        </button>
         <button [routerLink]="['/test-analysis', test().id]" mat-stroked-button>
           Analysis
         </button>

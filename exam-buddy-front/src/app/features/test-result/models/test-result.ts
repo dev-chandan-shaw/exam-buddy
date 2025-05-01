@@ -20,6 +20,7 @@ interface SubjectStat {
   timeTakenSeconds: number;
   totalTime: number;
   totalAttemptedQuestions: number;
+  totalCorrectQuestions: number;
   accuracy: number;
 }
 

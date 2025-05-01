@@ -1,0 +1,47 @@
+<div *ngIf="questionState()" class="h-[calc(100vh-2.6rem)] relative">
+  <!-- {{ currentAnswer | json }} -->
+  <div class="border-b-2 p-4">
+    <div class="flex justify-between w-full">
+      <h1 class="font-bold">Question No. {{ questionNumber() }}</h1>
+      <p>
+        Time :
+        {{ questionState().timeTakenSeconds | timeFormat }}
+      </p>
+    </div>
+  </div>
+  <div class="mt-4 py-4 px-2">
+    <fieldset>
+      <legend
+        class="mx-4"
+        [innerHTML]="questionState().question.description"
+        mathjax
+      ></legend>
+
+      <div class="mt-8 mx-4 flex flex-col gap-2">
+        <div
+          *ngFor="let option of questionState().question.options"
+          class="flex items-center gap-2 p-2 py-4"
+          [class.correct-answer]="isCorrect(option)"
+          [class.wrong-answer]="isWrong(option)"
+          [class.enabled]="isReattemptEnabled && !isReattempted()"
+          (click)="selectOption(option.id)"
+        >
+          <mat-icon>{{ getOptionIcon(option) }}</mat-icon>
+          <span [innerHTML]="option.description"></span>
+        </div>
+      </div>
+    </fieldset>
+  </div>
+  <div
+    class="flex gap-4 justify-between absolute bottom-0 w-full p-2 px-4 bg-[#F5F5F5] border-t-2"
+  >
+    <button class="bg-[#1FBAD6] text-white py-1 rounded-sm px-4">
+      Previous
+    </button>
+
+    <mat-checkbox (change)="toggleReattempt()" [checked]="isReattemptEnabled"
+      >Re-attempt Question</mat-checkbox
+    >
+    <button class="bg-[#1FBAD6] text-white py-1 rounded-sm px-4">Next</button>
+  </div>
+</div>

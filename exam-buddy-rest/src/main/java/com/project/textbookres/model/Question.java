@@ -17,6 +17,9 @@ public class Question {
 
     private String description;
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    private QuestionStats questionStats = new QuestionStats();
+
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
     private List<QuestionOption> options;
 

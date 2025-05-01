@@ -2,6 +2,7 @@ package com.project.textbookres.service;
 
 import com.project.textbookres.dto.QuestionStatus;
 import com.project.textbookres.model.TestAttempt;
+import com.project.textbookres.model.TestAttemptSection;
 import com.project.textbookres.model.Topic;
 import com.project.textbookres.model.test_analysis.*;
 import com.project.textbookres.respository.*;
@@ -61,9 +62,16 @@ public class TestAnalysisService {
                     subjectStats.setTotalTime(testAttemptSection.getTotalTime());
                     subjectStats.setTotalAttemptedQuestions(testAttemptSection.getTotalAttemptedQuestions());
                     subjectStats.setAccuracy(testAttemptSection.getAccuracy());
+                    subjectStats.setTotalCorrectQuestions(getTotalCorrectQuestionCount(testAttemptSection));
                     return subjectStats;
                 })
                 .toList();
+    }
+
+    private int getTotalCorrectQuestionCount(TestAttemptSection testAttemptSection) {
+        return testAttemptSection.getQuestions().stream().mapToInt(testAttemptQuestionState -> {
+            return testAttemptQuestionState.getQuestion().getOptions().stream().anyMatch(option -> option.getId() == testAttemptQuestionState.getSelectedOptionId() && option.isCorrect()) ? 1 : 0;
+        }).sum();
     }
 
     private List<TopicAnalysis> getTopicAnalysis(TestAttempt testAttempt, TestAnalysis testAnalysis) {

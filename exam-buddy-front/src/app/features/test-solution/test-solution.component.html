@@ -1,0 +1,23 @@
+<div class="flex justify-between w-full items-start h-dvh">
+  <div class="w-full">
+    <div class="flex items-center border-b-2 w-full py-1 gap-1 ps-4">
+      <p class="mr-12">Sections</p>
+      <p
+        *ngFor="let testSection of testSolution().sections"
+        (click)="selectTestSection(testSection)"
+        [ngClass]="{
+          'bg-[#166A84] text-white':
+            testSection?.subject?.id === currentSection().subject.id,
+          'hover:bg-slate-100':
+            testSection?.subject?.id !== currentSection().subject.id
+        }"
+        class="max-w-36 text-ellipsis whitespace-nowrap overflow-hidden py-1 px-2 rounded-md h-full cursor-pointer"
+      >
+        {{ testSection.subject.name }}
+      </p>
+    </div>
+    <test-solution-section-viewer />
+  </div>
+
+  <test-solution-question-nav-panel [testSection]="currentSection()" />
+</div>

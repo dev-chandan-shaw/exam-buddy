@@ -1,0 +1,37 @@
+<div class="bg-[#D9EDF7] h-dvh">
+  <div class="border-x-2 w-[380px] h-[100%] relative">
+    <div class="flex items-center gap-4 border-b-2 border-gray-300 px-4 py-2">
+      <img
+        class="h-6 w-6 rounded-full object-cover"
+        src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
+        alt=""
+      />
+      <p>Chandan</p>
+    </div>
+    <div class="flex gap-4 flex-wrap mb-12 p-4 text-xs">
+      <div
+        class="flex gap-2 items-center"
+        *ngFor="let item of TesSolutionQuestionStatus | keyvalue"
+      ></div>
+    </div>
+    <p class="bg-[#B4DBED] p-2 my-4 text-sm">
+      <span class="font-semibold uppercase">Section</span>:
+      {{ testSection()?.subject?.name }}
+    </p>
+    <div class="grid grid-cols-5 place-items-center gap-4 p-4">
+      <div
+        *ngFor="let item of testSection()?.questions; let $index = index"
+        (click)="selectQuestionHandler(item)"
+      >
+        <button class="border-2 border-black h-10 w-8">
+          {{ $index + 1 }}
+        </button>
+      </div>
+    </div>
+    <button
+      class="bg-[#1FBAD6] text-white p-2 rounded-sm absolute bottom-2 w-[calc(100%-32px)] left-1/2 -translate-x-1/2"
+    >
+      Submit Test
+    </button>
+  </div>
+</div>

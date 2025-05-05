@@ -1,4 +1,5 @@
-.custom-text-style {
-    font-size: 0.75rem;
-    color:  #9ca3af ;
+.custom-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 16px;
 }

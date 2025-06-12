@@ -1,0 +1,40 @@
+li {
+  padding: 1rem;
+
+  cursor: pointer;
+  transition: all 0.3s ease-in-out;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  &:hover {
+    background-color: #333;
+    transform: scale(1.1);
+  }
+}
+aside {
+  width: 250px;
+  background-color: black;
+  height: 100vh;
+  border-right: 1px solid #555;
+  color: white;
+}
+
+ul {
+  margin-top: 1rem;
+  overflow: hidden;
+}
+
+.active {
+  background-color: #333;
+}
+
+.material-symbols-outlined {
+  font-variation-settings: "FILL" 0, "wght" 400;
+  transition: font-variation-settings 0.2s ease;
+  cursor: pointer;
+}
+
+li:hover .material-symbols-outlined,
+li.active .material-symbols-outlined {
+  font-variation-settings: "FILL" 1, "wght" 600;
+}

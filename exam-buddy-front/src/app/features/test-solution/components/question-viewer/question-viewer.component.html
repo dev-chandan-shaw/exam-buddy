@@ -1,47 +1,188 @@
-<div *ngIf="questionState()" class="h-[calc(100vh-2.6rem)] relative">
-  <!-- {{ currentAnswer | json }} -->
-  <div class="border-b-2 p-4">
-    <div class="flex justify-between w-full">
-      <h1 class="font-bold">Question No. {{ questionNumber() }}</h1>
-      <p>
-        Time :
-        {{ questionState().timeTakenSeconds | timeFormat }}
-      </p>
-    </div>
-  </div>
-  <div class="mt-4 py-4 px-2">
-    <fieldset>
-      <legend
-        class="mx-4"
-        [innerHTML]="questionState().question.description"
-        mathjax
-      ></legend>
-
-      <div class="mt-8 mx-4 flex flex-col gap-2">
-        <div
-          *ngFor="let option of questionState().question.options"
-          class="flex items-center gap-2 p-2 py-4"
-          [class.correct-answer]="isCorrect(option)"
-          [class.wrong-answer]="isWrong(option)"
-          [class.enabled]="isReattemptEnabled && !isReattempted()"
-          (click)="selectOption(option.id)"
-        >
-          <mat-icon>{{ getOptionIcon(option) }}</mat-icon>
-          <span [innerHTML]="option.description"></span>
-        </div>
+<main *ngIf="questionState()" class="h-[calc(100vh-7rem)]">
+  <section class="h-[3.5rem] border-b-2 p-4">
+    <div class="flex justify-between items-center w-full text-gray-500">
+      <div class="flex items-center gap-4">
+        <h1 class="font-bold text-black">
+          Question No. {{ questionNumber() }}
+        </h1>
+        <p [ngClass]="getQuestionStatusClass()" class="px-2 rounded-3xl">
+          {{ getQuestionStatus() }}
+        </p>
+        <p>
+          <span class="text-gray-900">You :</span>
+          {{ questionState().timeTakenSeconds | timeFormat }}
+        </p>
+        <p>
+          <span class="text-gray-900">Avg:</span>
+          {{
+            questionState().question.questionStats.avgTimeSeconds | timeFormat
+          }}
+        </p>
+        <mat-divider class="text-gray-300" [vertical]="true"></mat-divider>
+        <p class="px-2 bg-green-600 text-white rounded-sm">
+          {{ getAccuracy() }}% answered correctly
+        </p>
       </div>
-    </fieldset>
-  </div>
-  <div
-    class="flex gap-4 justify-between absolute bottom-0 w-full p-2 px-4 bg-[#F5F5F5] border-t-2"
+      <div class="flex items-center gap-4">
+        @if(this.questionState().isQuestionSaved) {
+        <p
+          (click)="unsaveQuestion()"
+          class="flex items-center gap-1 cursor-pointer"
+        >
+          <mat-icon class="text-cyan-500">bookmark</mat-icon>
+          Saved
+        </p>
+        } @else {
+        <p
+          (click)="saveQuestion()"
+          class="flex items-center gap-1 cursor-pointer"
+        >
+          <span class="material-symbols-outlined"> bookmark_add </span>
+          Save
+        </p>
+        }
+        <p class="flex items-center gap-1 cursor-pointer">
+          <span class="material-symbols-outlined"> warning </span> Report
+        </p>
+      </div>
+    </div>
+  </section>
+  <section class="h-[calc(100vh-14rem)] overflow-auto">
+    <div class="mt-4 mx-4 py-4 px-2">
+      <fieldset>
+        <legend
+          [innerHTML]="questionState().question.description"
+          mathjax
+        ></legend>
+
+        <div class="mt-8 flex flex-col gap-2">
+          <div
+            *ngFor="let option of questionState().question.options"
+            class="flex justify-between gap-2 p-2 py-4"
+            [class.correct-answer]="isCorrectOption(option)"
+            [class.wrong-answer]="isWrongOption(option)"
+            [class.enabled]="isReattemptEnabled && !isReattempted()"
+            (click)="selectOption(option.id)"
+          >
+            <div class="flex items-center gap-2">
+              <mat-icon>{{ getOptionIcon(option) }}</mat-icon>
+              <span [innerHTML]="option.description"></span>
+            </div>
+            <div class="flex items-center gap-4">
+              @if (questionState().selectedOptionId === option.id &&
+              isReattempted()) {
+              <p
+                [ngClass]="
+                  isCorrectAnswer()
+                    ? 'bg-green-50 text-green-500'
+                    : 'bg-red-50 text-red-500'
+                "
+                class="px-2 rounded-sm"
+              >
+                Your first attempt
+              </p>
+              } @if (isCorrectOption(option)) {
+              <p class="px-2 text-green-500 rounded-sm bg-green-50">
+                {{ getAccuracy() }}% answered correctly
+              </p>
+              }
+            </div>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+    <div class="mx-4 mt-6">
+      @if (!showViewSolution()) {
+      <div class="p-4 bg-yellow-50 border border-yellow-200 w-[300px]">
+        <p>Re-attempt Mode: ON</p>
+        <p class="italic text-sm">Now you can re-attempt the question</p>
+      </div>
+      <div
+        (click)="toggleViewSolution()"
+        class="flex gap-4 mt-6 cursor-pointer border text-cyan-400 border-cyan-300 px-4 py-1 w-[200px]"
+      >
+        <mat-icon>visibility</mat-icon>
+        <span>View Solution</span>
+      </div>
+      } @else {
+      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+        <mat-tab label="Solution">
+          <!-- <div class="p-4" [innerHTML]="questionState().question.solution"></div> -->
+          <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Quasi, vel
+            ea perferendis quos, optio eos eum laborum repellendus illo harum
+            omnis. Sunt in quos id fugiat. Ad ut architecto saepe deserunt eum
+            vel magnam error fugiat officiis nesciunt pariatur voluptas optio
+            totam voluptatibus, nihil a hic temporibus iste accusantium facilis
+            quasi ex. Quia commodi nesciunt corporis quis a excepturi ducimus
+            dolorum quas autem quaerat reprehenderit, laudantium odit ab enim
+            nostrum? Tempora molestiae maxime voluptas quidem autem! Vero quae
+            tenetur modi in reprehenderit. Quos saepe quis assumenda, rem
+            laudantium nulla sed, hic fugiat deleniti perspiciatis
+            exercitationem tempore optio distinctio ex animi a aliquid vero eum
+            necessitatibus consequuntur asperiores eveniet. Sapiente quam porro
+            iste quis dolores neque nam error vel reprehenderit tempore quia
+            quae aperiam necessitatibus natus reiciendis assumenda accusamus,
+            beatae aliquam impedit eveniet cupiditate quaerat! Explicabo,
+            numquam pariatur vel minima neque architecto praesentium ad repellat
+            quo exercitationem ut alias excepturi assumenda eius, incidunt non
+            ipsum? Perferendis officia explicabo maiores ullam nobis,
+            repellendus beatae aliquid eius tempore distinctio excepturi nostrum
+            impedit reprehenderit laboriosam quis totam doloremque accusamus
+            delectus possimus dolorem aspernatur iure! Optio exercitationem
+            quasi quisquam beatae odit praesentium non fugit sequi, veniam
+            blanditiis earum. Eius quos aliquid reprehenderit quam? Fuga, earum!
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Accusamus
+            aliquid quam laborum sed mollitia in itaque quaerat recusandae iste?
+            Optio laboriosam nesciunt, quasi suscipit assumenda deserunt sed,
+            cum recusandae ipsam atque beatae eos a quis debitis ab culpa
+            temporibus expedita. Excepturi, officia delectus! Beatae inventore
+            ad aliquid atque quia nam numquam nobis cum error velit officia illo
+            voluptatem, quas doloremque eligendi maiores rem unde. Sed ex maxime
+            expedita deleniti eaque at debitis nisi veritatis temporibus quidem
+            saepe ea, id, rem similique beatae optio. Ipsam unde, beatae porro
+            temporibus atque labore quasi maiores molestiae consequatur. Vitae
+            inventore a cupiditate rerum deleniti! Animi sint doloribus
+            veritatis, labore fuga architecto sunt consequatur officiis, quos
+            enim, voluptatem reiciendis nesciunt facere! Voluptatibus corporis
+            laboriosam vel in qui doloremque ut nihil ipsa ad, optio laborum
+            omnis ea nulla sapiente distinctio fugiat, aut, cupiditate officia!
+            Iste, veritatis nam qui quam cupiditate eos architecto beatae
+            consequuntur reiciendis minus illum. Provident nesciunt dolores iste
+            repellat, sequi vero veritatis dolor, hic, nulla quasi facilis
+            molestiae temporibus ullam perspiciatis facere dignissimos
+            reprehenderit. Aperiam, accusamus! Dicta quae odio consequuntur
+            ipsum dolores placeat a, asperiores fugit! Aspernatur quas nisi
+            quisquam cupiditate, reprehenderit esse nobis vitae repellendus
+            deleniti natus ad accusamus a eveniet consequatur.
+          </p>
+        </mat-tab>
+      </mat-tab-group>
+      }
+    </div>
+  </section>
+  <section
+    class="flex gap-4 h-[3.5rem] justify-between w-full p-2 px-4 bg-[#F5F5F5] border-t-2"
   >
-    <button class="bg-[#1FBAD6] text-white py-1 rounded-sm px-4">
+    <button
+      (click)="prevQuestion()"
+      class="bg-[#1FBAD6] text-white py-1 rounded-sm px-4"
+    >
       Previous
     </button>
 
-    <mat-checkbox (change)="toggleReattempt()" [checked]="isReattemptEnabled"
-      >Re-attempt Question</mat-checkbox
+    <mat-slide-toggle
+      (change)="toggleReattempt()"
+      [checked]="isReattemptEnabled"
+      labelPosition="before"
+      class="text-xl"
+      >Re-attempt Question</mat-slide-toggle
     >
-    <button class="bg-[#1FBAD6] text-white py-1 rounded-sm px-4">Next</button>
-  </div>
-</div>
+    <button
+      (click)="nextQuestion()"
+      class="bg-[#1FBAD6] text-white py-1 rounded-sm px-4"
+    >
+      Next
+    </button>
+  </section>
+</main>

@@ -1,1 +1,16 @@
-<p>question-status-button works!</p>
+<div class="relative">
+  <button
+    class="flex items-center justify-center"
+    [class]="getClass()"
+    [style.width.px]="width()"
+    [style.height.px]="height()"
+    [ngClass]="styleClass()"
+  >
+    <ng-content></ng-content>
+  </button>
+  @if (isSaved()) {
+  <mat-icon class="absolute -bottom-3 -right-3 text-cyan-500">
+    bookmark
+  </mat-icon>
+  }
+</div>

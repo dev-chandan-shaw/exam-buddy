@@ -1,6 +1,7 @@
 import {
   computed,
   effect,
+  inject,
   Injectable,
   linkedSignal,
   Signal,
@@ -9,12 +10,17 @@ import {
 import { environment } from 'app/environments/environment';
 import { TestSolution } from '../models/test-solution';
 import { TestSolutionSection } from '../models/test-solution-section';
-import { TestSolutionQuestion } from '../models/test-soution-question';
+import {
+  SaveQuestionRequest,
+  TestSolutionQuestion,
+} from '../models/test-soution-question';
+import { TestSolutionApiService } from './test-solution.api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TestSolutionService {
+  private _testSolutionApiService = inject(TestSolutionApiService);
   private isReattemptEnabled = signal<boolean>(true);
   private testSolution = signal<TestSolution>({} as TestSolution);
 
@@ -97,5 +103,39 @@ export class TestSolutionService {
 
   setCanReattempt(canReattempt: boolean) {
     this.isReattemptEnabled.set(canReattempt);
+  }
+
+  prevQuestion() {
+    const questionState = this.selectedQuestion();
+    const currIndex = this.selectedSection().questions.indexOf(questionState);
+    const nextIndex = currIndex > 0 ? currIndex - 1 : 0;
+    this.selectedQuestion.set(this.selectedSection().questions[nextIndex]);
+  }
+
+  nextQuestion() {
+    const questionState = this.selectedQuestion();
+    const currIndex = this.selectedSection().questions.indexOf(questionState);
+    const nextIndex = (currIndex + 1) % this.selectedSection().questions.length;
+    this.selectedQuestion.set(this.selectedSection().questions[nextIndex]);
+  }
+
+  saveQuestion() {
+    this.selectedQuestion().isQuestionSaved = true;
+    const data: SaveQuestionRequest = {
+      questionId: this.selectedQuestion().question.id,
+      testId: this.testSolution().testId,
+    };
+    this._testSolutionApiService.saveQuestion(data).subscribe((res) => {
+      console.log(res);
+    });
+  }
+
+  unsaveQuestion() {
+    this.selectedQuestion().isQuestionSaved = false;
+    this._testSolutionApiService
+      .unsaveQuestion(this.selectedQuestion().question.id)
+      .subscribe((res) => {
+        console.log(res);
+      });
   }
 }

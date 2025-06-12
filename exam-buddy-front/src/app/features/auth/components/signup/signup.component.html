@@ -1,0 +1,86 @@
+<main class="grid grid-cols-2 h-svh">
+  <section>
+    <img
+      src="https://static.vecteezy.com/system/resources/previews/003/689/232/non_2x/online-registration-or-sign-up-login-for-account-on-smartphone-app-user-interface-with-secure-password-mobile-application-for-ui-web-banner-access-cartoon-people-illustration-vector.jpg"
+      alt=""
+      class="h-dvh object-cover w-full"
+    />
+  </section>
+  <section>
+    <div class="flex flex-col items-center justify-center h-dvh">
+      <div class="items-start example-form">
+        <h1 class="text-3xl font-bold">Sign Up!</h1>
+      </div>
+      <form class="example-form mt-8" (ngSubmit)="onSubmit()">
+        <p class="flex gap-4">
+          <mat-form-field class="example-full-width">
+            <mat-label>Enter your first name</mat-label>
+            <input matInput [formControl]="firstName" />
+            @if (firstName.hasError('required')) {
+            <mat-error>First name is required</mat-error>
+            }
+          </mat-form-field>
+          <mat-form-field class="example-full-width">
+            <mat-label>Enter your last name</mat-label>
+            <input matInput [formControl]="lastName" />
+            @if (email.hasError('required')) {
+            <mat-error>Last name is required</mat-error>
+            }
+          </mat-form-field>
+        </p>
+        <mat-form-field class="example-full-width">
+          <mat-label>Enter your email</mat-label>
+          <input matInput [formControl]="email" />
+          @if (email.hasError('required')) {
+          <mat-error>Email is required</mat-error>
+          } @else if (email.hasError('email')) {
+          <mat-error>Please enter a valid email address</mat-error>
+          }
+        </mat-form-field>
+        <mat-form-field class="example-full-width">
+          <mat-label>Enter your password</mat-label>
+          <input
+            matInput
+            [formControl]="password"
+            [type]="hide() ? 'password' : 'text'"
+          />
+          <button
+            mat-icon-button
+            matSuffix
+            (click)="clickEvent($event)"
+            [attr.aria-label]="'Hide password'"
+            [attr.aria-pressed]="hide()"
+          >
+            <mat-icon>{{ hide() ? "visibility_off" : "visibility" }}</mat-icon>
+          </button>
+          @if (password.hasError('required')) {
+          <mat-error>Password is required</mat-error>
+          }
+        </mat-form-field>
+
+        <button
+          type="submit"
+          [disabled]="isDisabled()"
+          [ngClass]="{ 'opacity-50 cursor-not-allowed': isDisabled() }"
+          class="w-full bg-cyan-600 p-4 text-white text-lg rounded-md"
+        >
+          Sign Up
+        </button>
+        <p class="text-center my-6">or continue</p>
+        <button
+          class="w-full bg-white hover:bg-slate-50 p-2 text-lg border border-cyan-600 rounded-md flex items-center justify-center gap-4"
+        >
+          <img
+            src="https://img.icons8.com/color/48/000000/google-logo.png"
+            alt=""
+          />
+          Sign up with Google
+        </button>
+        <p (click)="goToLogin()" class="my-6 text-center cursor-pointer">
+          Already have an account?
+          <span class="font-bold">Sign In</span>
+        </p>
+      </form>
+    </div>
+  </section>
+</main>

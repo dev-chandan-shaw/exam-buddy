@@ -11,5 +11,10 @@ export interface TestSolutionQuestion {
 export enum TestSolutionQuestionStatus {
   CORRECT = 'CORRECT',
   INCORRECT = 'INCORRECT',
-  NOT_ATTEMPTED = 'NOT_ATTEMPTED',
+  UNATTEMPTED = 'UNATTEMPTED',
+}
+
+export interface SaveQuestionRequest {
+  questionId: number;
+  testId: number;
 }

@@ -1,0 +1,28 @@
+<header
+  class="h-20 border-b-slate-300 border-b flex justify-between items-center px-8"
+>
+  <div
+    class="flex ml-auto items-center gap-2 cursor-pointer hover:bg-gray-100 rounded-lg px-4"
+    [matMenuTriggerFor]="menu"
+  >
+    <img
+      src="https://t3.ftcdn.net/jpg/05/79/55/26/360_F_579552668_sZD51Sjmi89GhGqyF27pZcrqyi7cEYBH.jpg"
+      height="35px"
+      width="35px"
+      class="rounded-full border p-1 m-1"
+      alt=""
+    />
+    <span> {{ user()?.firstName }}</span>
+    <span class="material-symbols-outlined">expand_more</span>
+  </div>
+  <mat-menu class="w-44" #menu="matMenu">
+    <button mat-menu-item>
+      <mat-icon>person</mat-icon>
+      <span>Profile</span>
+    </button>
+    <button (click)="logout()" mat-menu-item>
+      <mat-icon> logout </mat-icon>
+      <span>Logout</span>
+    </button>
+  </mat-menu>
+</header>

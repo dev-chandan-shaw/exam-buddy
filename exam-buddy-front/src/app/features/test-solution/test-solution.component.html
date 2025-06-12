@@ -1,4 +1,34 @@
-<div class="flex justify-between w-full items-start h-dvh">
+<header
+  class="flex justify-between items-center bg-cyan-600 text-white h-[70px]"
+>
+  <section (click)="goBack()" class="flex items-center gap-4 font-bold px-10">
+    <mat-icon class="scale-150 cursor-pointer">keyboard_backspace</mat-icon>
+    <div>
+      <h2 class="text-lg">Tests</h2>
+      <p class="text-sm">{{ testSolution().testName }}</p>
+    </div>
+  </section>
+  <div *ngIf="attempInfo().length > 1" class="flex items-center">
+    <select
+      name="attempt"
+      [(ngModel)]="selectedAttemptId"
+      class="text-black px-4 py-2 rounded-md outline-none cursor-pointer"
+    >
+      @for (attempt of attempInfo(); track $index) {
+      <option class="cursor-pointer" [value]="attempt.attemptId">
+        Attempt {{ $index + 1 }}
+      </option>
+      }
+    </select>
+  </div>
+  <section
+    (click)="goToAnalysis()"
+    class="px-6 bg-cyan-700 h-full flex items-center cursor-pointer"
+  >
+    Analytics
+  </section>
+</header>
+<div class="flex justify-between w-full items-start">
   <div class="w-full">
     <div class="flex items-center border-b-2 w-full py-1 gap-1 ps-4">
       <p class="mr-12">Sections</p>

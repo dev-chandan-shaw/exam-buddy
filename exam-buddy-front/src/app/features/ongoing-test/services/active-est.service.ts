@@ -9,7 +9,7 @@ import {
 import { OngoingTestApiService } from './api/ongoing-test-api.service';
 import { Router } from '@angular/router';
 
-@Injectable()
+@Injectable({ providedIn: 'root' })
 export class ActiveTestService {
   private _router = inject(Router);
   private activeTest = signal<IActiveTest>({} as IActiveTest);
@@ -32,6 +32,10 @@ export class ActiveTestService {
     });
     return map;
   });
+
+  isTestActive() {
+    return !!this.activeTest();
+  }
 
   setActiveTest(test: IActiveTest) {
     this.activeTest.set(test);

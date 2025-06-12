@@ -1,4 +1,4 @@
-<div class="bg-[#D9EDF7] h-dvh">
+<div class="bg-[#D9EDF7] h-[calc(100vh-70px)]">
   <div class="border-x-2 w-[380px] h-[100%] relative">
     <div class="flex items-center gap-4 border-b-2 border-gray-300 px-4 py-2">
       <img
@@ -6,13 +6,24 @@
         src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
         alt=""
       />
-      <p>Chandan</p>
+      <p>{{ user()?.firstName }}</p>
     </div>
-    <div class="flex gap-4 flex-wrap mb-12 p-4 text-xs">
+    <div class="flex gap-4 flex-wrap mb-4 p-4 text-xs">
       <div
         class="flex gap-2 items-center"
         *ngFor="let item of TesSolutionQuestionStatus | keyvalue"
-      ></div>
+      >
+        <div class="flex gap-2 items-center">
+          <app-question-status-button
+            [height]="20"
+            [width]="30"
+            [status]="item.value"
+          >
+            {{ getQuestionCount(item.value) }}
+          </app-question-status-button>
+          <p>{{ item.value | titlecase }}</p>
+        </div>
+      </div>
     </div>
     <p class="bg-[#B4DBED] p-2 my-4 text-sm">
       <span class="font-semibold uppercase">Section</span>:
@@ -23,15 +34,18 @@
         *ngFor="let item of testSection()?.questions; let $index = index"
         (click)="selectQuestionHandler(item)"
       >
-        <button class="border-2 border-black h-10 w-8">
-          {{ $index + 1 }}
-        </button>
+        <app-question-status-button
+          [styleClass]="isSelectedQuestion(item) ? 'rounded-3xl' : ''"
+          [status]="item.status"
+          [isSaved]="item.isQuestionSaved"
+          >{{ $index + 1 }}</app-question-status-button
+        >
       </div>
     </div>
     <button
       class="bg-[#1FBAD6] text-white p-2 rounded-sm absolute bottom-2 w-[calc(100%-32px)] left-1/2 -translate-x-1/2"
     >
-      Submit Test
+      Summary
     </button>
   </div>
 </div>

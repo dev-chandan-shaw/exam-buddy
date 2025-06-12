@@ -7,8 +7,6 @@ import { QuestionStatus } from 'app/features/ongoing-test/models/active-test';
 })
 export class currentQuestionClassPipe implements PipeTransform {
   transform(questionId: number, currentQuestionId: number): string {
-    console.log(questionId, currentQuestionId);
-
     if (questionId === currentQuestionId) {
       return 'rounded-3xl';
     } else {

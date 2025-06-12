@@ -41,6 +41,7 @@ export class QuesitonNavPanelComponent {
   }
 
   selectQuestionHandler(question: ActiveTestQuestionState) {
+    if (this.isCurrentQuestion(question)) return;
     this._activeTestService.setCurrentQuestionState(question);
   }
   submitTest() {

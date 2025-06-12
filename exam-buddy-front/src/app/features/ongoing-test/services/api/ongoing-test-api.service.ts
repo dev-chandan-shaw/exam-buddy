@@ -15,16 +15,13 @@ export class OngoingTestApiService {
   private _http = inject(HttpClient);
 
   getOngoingTest(): Observable<IActiveTest> {
-    return this._http.get<IActiveTest>(
-      `${this._baseUrl}test-attempt/active?userId=1`
-    );
+    return this._http.get<IActiveTest>(`${this._baseUrl}test-attempt/active`);
   }
 
   startTest(testId: number): Observable<{ userId: number; testId: number }> {
-    const body = { userId: 1, testId };
     return this._http.post<any>(
-      `${this._baseUrl}test-attempt/start?userId=1`,
-      body
+      `${this._baseUrl}test-attempt/start?testId=${testId}`,
+      {}
     );
   }
 
@@ -33,9 +30,6 @@ export class OngoingTestApiService {
   }
 
   submitTest() {
-    return this._http.put<any>(
-      `${this._baseUrl}test-attempt/finish?userId=1`,
-      {}
-    );
+    return this._http.put<any>(`${this._baseUrl}test-attempt/finish`, {});
   }
 }

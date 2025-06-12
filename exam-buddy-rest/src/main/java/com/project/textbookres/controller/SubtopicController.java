@@ -27,15 +27,9 @@ public class SubtopicController {
     private TopicRepository topicRepository;
 
     @PostMapping
-    public ResponseEntity<?> addSubtopic(@RequestBody SubtopicCreateRequest reqBody) {
-       long topicId = reqBody.getTopicId();
-       Optional<Topic> optionalTopic = topicRepository.findById(topicId);
-       if (optionalTopic.isEmpty()) {
-           return ResponseEntity.badRequest().body("Topic not found");
-       }
+    public ResponseEntity<Subtopic> addSubtopic(@RequestParam String topicName) {
        Subtopic subtopic = new Subtopic();
-       subtopic.setName(reqBody.getName());
-       subtopic.setTopic(optionalTopic.get());
+       subtopic.setName(topicName);
        subtopicRepository.save(subtopic);
        return ResponseEntity.ok(subtopic);
     }

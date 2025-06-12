@@ -79,6 +79,7 @@ public class QuestionController {
         question.setExam(optionalExam.get());
         question.setOptions(questionOptions);
         question.setDescription(reqBody.getDescription());
+        question.setSolution(reqBody.getSolution());
 
         //add question to the associated section
         optionalTestSection.get().getQuestions().add(question);

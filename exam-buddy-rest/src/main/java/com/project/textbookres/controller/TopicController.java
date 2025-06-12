@@ -29,7 +29,7 @@ public class TopicController {
         }
         Topic topic = new Topic();
         topic.setName(reqBody.getName());
-        topic.setSubject(optionalSubject.get());
+        topic.setSubjectId(reqBody.getSubjectId());
         topicRepository.save(topic);
         return ResponseEntity.ok(topic);
     }

@@ -17,6 +17,8 @@ public class Question {
 
     private String description;
 
+    private String solution;
+
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     private QuestionStats questionStats = new QuestionStats();
 

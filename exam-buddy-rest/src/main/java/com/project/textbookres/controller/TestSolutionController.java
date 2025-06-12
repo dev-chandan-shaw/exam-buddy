@@ -2,7 +2,9 @@ package com.project.textbookres.controller;
 
 import com.project.textbookres.dto.test_solution.TestSolution;
 import com.project.textbookres.model.TestAttempt;
+import com.project.textbookres.model.User;
 import com.project.textbookres.respository.TestAttemptRepository;
+import com.project.textbookres.respository.UserRepository;
 import com.project.textbookres.service.TestSolutionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -21,15 +24,21 @@ public class TestSolutionController {
 
     @Autowired
     private TestAttemptRepository testAttemptRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
     @GetMapping("/by-test-attempt")
-    public ResponseEntity<TestSolution> getTestAttemptSolution(@RequestParam long testAttemptId) {
-        return ResponseEntity.ok(testSolutionService.getTestSolution(testAttemptId));
+    public ResponseEntity<TestSolution> getTestAttemptSolution(@RequestParam long testAttemptId, Principal principal) {
+        User user = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
+        return ResponseEntity.ok(testSolutionService.getTestSolution(testAttemptId, user));
     }
 
     @GetMapping("/by-test")
-    public ResponseEntity<?> getTestSolutionByTest(@RequestParam long testId) {
-        List<TestAttempt> testAttempt = testAttemptRepository.findByTestIdAndUserId(testId, 1L) ; // <- replace 1L later dynamically
+    public ResponseEntity<?> getTestSolutionByTest(@RequestParam long testId, Principal principal) {
+        User user = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
+        List<TestAttempt> testAttempt = testAttemptRepository.findByTestIdAndUserId(testId, user.getId()) ;
         long testAttemptId = testAttempt.get(testAttempt.size() - 1).getId();
-        return ResponseEntity.ok(testSolutionService.getTestSolution(testAttemptId));
+        return ResponseEntity.ok(testSolutionService.getTestSolution(testAttemptId, user));
     }
 }

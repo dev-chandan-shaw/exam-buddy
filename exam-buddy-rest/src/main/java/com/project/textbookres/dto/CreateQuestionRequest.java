@@ -12,4 +12,5 @@ public class CreateQuestionRequest {
     private long subtopicId;
     private long testSectionId;
     private long examId;
+    private String solution;
 }

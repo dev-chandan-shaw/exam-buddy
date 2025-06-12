@@ -16,6 +16,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -60,10 +61,9 @@ public class TestAttemptController {
 
 
     @PostMapping("/start")
-    public ResponseEntity<?> startTest(@RequestBody StartTestRequest request) {
+    public ResponseEntity<?> startTest(@RequestParam long testId, Principal principal) {
 
-        long userId = request.getUserId();
-        long testId = request.getTestId();
+        long userId = userRepository.findByEmail(principal.getName()).orElseThrow(RuntimeException::new).getId();
 
         Optional<TestAttempt> optionalActiveTest = testAttemptRepository.findByUserIdAndCompleted(userId, false); // check if user has an active test
         if (optionalActiveTest.isPresent()) {
@@ -127,7 +127,8 @@ public class TestAttemptController {
 
 
     @GetMapping("/active")
-    public ResponseEntity<?> getActiveTestByUserId(@RequestParam long userId) {
+    public ResponseEntity<?> getActiveTestByUserId(Principal principal) {
+        long userId = userRepository.findByEmail(principal.getName()).orElseThrow(RuntimeException::new).getId();
         Optional<TestAttempt> optionalActiveTest = testAttemptRepository.findByUserIdAndCompleted(userId, false);
         if (optionalActiveTest.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body("User does not have an active test");
@@ -147,7 +148,8 @@ public class TestAttemptController {
     }
 
     @PutMapping("/finish")
-    public ResponseEntity<?> finishTest(@RequestParam long userId) {
+    public ResponseEntity<?> finishTest(Principal principal) {
+        long userId = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found")).getId();
         Optional<TestAttempt> optionalActiveTest = testAttemptRepository.findByUserIdAndCompleted(userId, false);
         if (optionalActiveTest.isEmpty()) {
             return ResponseEntity.badRequest().body("User does not have an active test");
@@ -188,15 +190,15 @@ public class TestAttemptController {
         testAttempt.setMarksObtained(testTotalMarksObtained);
         testAttemptSectionRepository.saveAll(testAttempt.getTestSections());
         testAttemptRepository.save(testAttempt);
-        attemptInfoService.saveAttemptInfo(testAttempt);
+        attemptInfoService.saveAttemptInfo(testAttempt, userId);
         testAnalysisService.generateTestAnalysis(testAttempt);
         questionStatsRepository.saveAll(questionStatsList);
         return ResponseEntity.ok(testAttempt);
     }
 
     @GetMapping("/{testId}/attempted")
-    public ResponseEntity<?> isTestAttempted(@PathVariable long testId) {
-        long userId = 1;
+    public ResponseEntity<?> isTestAttempted(@PathVariable long testId, Principal principal) {
+        long userId = userRepository.findByEmail(principal.getName()).orElseThrow(RuntimeException::new).getId();
         List<TestAttempt> attempts = testAttemptRepository.findByUserIdAndTestId(userId, testId);
         return ResponseEntity.ok(!attempts.isEmpty());
     }

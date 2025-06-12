@@ -1,19 +1,22 @@
 package com.project.textbookres.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
 @Data
-public class Subject {
+public class SavedQuestion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
-}
 
+    @ManyToOne
+    private Test test;
+
+    @ManyToOne
+    private Question question;
+
+    @ManyToOne
+    private User user;
+}
 

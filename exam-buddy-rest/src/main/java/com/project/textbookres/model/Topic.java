@@ -16,11 +16,5 @@ public class Topic {
 
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "subject_id")
-    @JsonIgnore
-    private Subject subject;
-
-    @OneToMany(mappedBy = "topic", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Subtopic> subtopics = new ArrayList<>();
+    private long subjectId;
 }

@@ -8,5 +8,6 @@ import java.util.List;
 public class TestSolution {
     private long testAttemptId;
     private String testName;
+    private long testId;
     private List<TestSolutionSection> sections;
 }

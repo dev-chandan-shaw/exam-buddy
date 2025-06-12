@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +19,7 @@ public class TestController {
 
     @Autowired
     private ExamRepository examRepository;
+
     @Autowired
     private TestRepository testRepository;
 
@@ -29,6 +31,9 @@ public class TestController {
 
     @Autowired
     private TestAttemptRepository testAttemptRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @PostMapping
     private ResponseEntity<?> createTest(@RequestBody CreateTestRequest reqBody) {
@@ -65,17 +70,17 @@ public class TestController {
     }
 
     @GetMapping("/unpublished")
-    public List<Test> getTestsByPublishStatus() {
-        long userId = 1L;
+    public List<Test> getTestsByPublishStatus(Principal principal) {
+        long userId = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found")).getId();
         return testRepository.findByUserIdAndPublished(userId, false);
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<?> getTestByExam(@RequestParam Long examId) {
+    public ResponseEntity<?> getTestByExam(@RequestParam Long examId, Principal principal) {
         List<Test> tests = testRepository.findByExamId(examId);
-
+        User user = userRepository.findByEmail(principal.getName()).orElseThrow(() -> new RuntimeException("User not found"));
         List<TestDto> testDtos = tests.stream().map(test -> {
-            List<TestAttempt> testAttempt = testAttemptRepository.findByTestIdAndUserId(test.getId(), 1L); // <- replace 1L later dynamically
+            List<TestAttempt> testAttempt = testAttemptRepository.findByTestIdAndUserId(test.getId(), user.getId());
             boolean isAttempted = !testAttempt.isEmpty();
             boolean isPaused = !testAttempt.isEmpty() && testAttempt.get(testAttempt.size() - 1).isPaused();
             int totalQuestions = test.getTestSections().stream().mapToInt(testSection -> testSection.getQuestions().size()).sum();
